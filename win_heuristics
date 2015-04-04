@@ -1,0 +1,7 @@
+How to win at Connect 4 
+1. Win is always possible assuming you go first and play in center column, if both players make perfect moves
+2. Play in center column as often as possible, since any connect four that is not vertical has to use a checker from the center column, so if you control most of it it’s very hard for opponent to get a connect four
+3. Look moves ahead as soon as opponent gets two in a row
+4. Watch out for game ending spaces, and never play directly below this space
+5. Have two threats- one where opponent blocks to a win and one where you just win, like by making a seven shape so finishing the horizontal or diagonal connect four on the right are two spaces on top of each other
+6. Read this awesome article: http://www.quora.com/What-is-the-winning-strategy-for-the-first-player-in-Connect-Four-games
