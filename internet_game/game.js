@@ -1,9 +1,10 @@
 
-var width = 1000;
+var width = 800;
 var height = 500;
+var margin = 20;
+var radius = 30;
 
-
-draw_board = function (x, y) {
+draw_board = function (col_num, row_num) {
 
     var svg = d3.selectAll("#game")
         .append("svg")
@@ -15,10 +16,28 @@ draw_board = function (x, y) {
         .attr("y", 0)
         .attr("width", width)
         .attr("height", height)
-        .style("fill", black)
+        .style("fill", "black");
+
+    var colWidth = Math.round(width / col_num);
+    var rowHeight = Math.round(height / row_num);
+
+    for (var rowIndex = 0; rowIndex < row_num; rowIndex++) {
+        var yPos = margin + (rowIndex * rowHeight);
+
+        for (var colIndex = 0; colIndex < col_num; colIndex++) {
+            var xPos = margin + (colIndex *colWidth);
+
+            svg.append("circle")
+                .attr("cx", xPos)
+                .attr("cy", yPos)
+                .attr("r", radius)
+                .style("fill", "#fff");
+
+        }
+    }
 }
 
-draw_board ();
+draw_board (5, 5);
 
 
 //     drawGrid: function (columns, rows) {
