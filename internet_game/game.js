@@ -82,7 +82,6 @@ run_game = function () {
         .on("click", function() {
 
             counter = 1-counter;
-            console.log(counter)
 
             var current_column = d3.select(this).attr("column").slice(-1);
             var row_to_fill = next_open_spot[current_column]--;
