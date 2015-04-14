@@ -16,7 +16,7 @@ draw_board = function (col_num, row_num) {
         .attr("y", 0)
         .attr("width", width)
         .attr("height", height)
-        .style("fill", "black");
+        .style("fill", "#101330");
 
     var colWidth = Math.round(width / col_num);
     var rowHeight = Math.round(height / row_num);
@@ -31,7 +31,7 @@ draw_board = function (col_num, row_num) {
                 .attr("cx", xPos)
                 .attr("cy", yPos)
                 .attr("r", radius)
-                .style("fill", "#fff");
+                .style("fill", "white");
 
         }
     }
