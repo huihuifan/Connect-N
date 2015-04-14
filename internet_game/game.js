@@ -57,10 +57,29 @@ run_game = function () {
     var next_open_spot = [4, 4, 4, 4, 4];
 
     svg.selectAll(".token_spot")
+        .on("mouseover", function() {
+
+            var current_column = d3.select(this).attr("column").slice(-1);
+            var row_to_fill = next_open_spot[current_column];
+
+            d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
+                .style("fill", "#fdae61");
+
+        })
+        .on("mouseout", function() {
+
+            var current_column = d3.select(this).attr("column").slice(-1);
+            var row_to_fill = next_open_spot[current_column];
+
+            d3.selectAll("[column=column" + current_column + "]:not(.filled)")
+                .style("fill", "white")
+                .interrupt()
+                .transition();
+
+        })
         .on("click", function() {
 
             var current_column = d3.select(this).attr("column").slice(-1);
-
             var row_to_fill = next_open_spot[current_column]--;
 
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
@@ -68,9 +87,15 @@ run_game = function () {
                 .attr("class", "filled")
                 .attr("r", radius-3)
                 .style("fill", "#d53e4f")
-            .transition()
+              .transition()
                 .duration(500)
                 .attr("cy", -5 + margin + (row_to_fill * rowHeight));
+
+            d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
+              .transition()
+                .delay(500)
+                .duration(0)
+                .style("fill", "#fdae61");
 
         });
 
