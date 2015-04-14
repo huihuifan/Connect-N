@@ -1,7 +1,7 @@
 
-var width = 800;
-var height = 500;
-var margin = 20;
+var width = 700;
+var height = 450;
+var margin = 50;
 var radius = 30;
 
 draw_board = function (col_num, row_num) {
@@ -22,10 +22,10 @@ draw_board = function (col_num, row_num) {
     var rowHeight = Math.round(height / row_num);
 
     for (var rowIndex = 0; rowIndex < row_num; rowIndex++) {
-        var yPos = margin + (rowIndex * rowHeight);
+        var yPos = -5 + margin + (rowIndex * rowHeight);
 
         for (var colIndex = 0; colIndex < col_num; colIndex++) {
-            var xPos = margin + (colIndex *colWidth);
+            var xPos = 15 + margin + (colIndex *colWidth);
 
             svg.append("circle")
                 .attr("cx", xPos)
