@@ -32,6 +32,13 @@ draw_board = function (col_num, row_num) {
                 .attr("cx", xPos)
                 .attr("cy", yPos)
                 .attr("r", radius)
+                .attr("class", "circle_border")
+                .style("fill", "white");
+
+            svg.append("circle")
+                .attr("cx", xPos)
+                .attr("cy", yPos)
+                .attr("r", radius)
                 .attr("column", "column" + colIndex)
                 .attr("row", "row" + rowIndex)
                 .attr("class", "token_spot")
@@ -54,6 +61,7 @@ run_game = function () {
 
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
                 .attr("class", "filled")
+                .attr("r", radius-3)
                 .style("fill", "#d53e4f");
 
         });
