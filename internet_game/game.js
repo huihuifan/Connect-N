@@ -95,7 +95,7 @@ run_game = function () {
                         return "#d53e4f"
                     }
                     else {
-                        return "#e6f598"
+                        return "#80cdc1"
                     }
                 })
               .transition()
