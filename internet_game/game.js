@@ -54,6 +54,8 @@ draw_board = function () {
 
 run_game = function () {
 
+    counter = 0;
+
     var next_open_spot = [4, 4, 4, 4, 4];
 
     svg.selectAll(".token_spot")
@@ -79,6 +81,9 @@ run_game = function () {
         })
         .on("click", function() {
 
+            counter = 1-counter;
+            console.log(counter)
+
             var current_column = d3.select(this).attr("column").slice(-1);
             var row_to_fill = next_open_spot[current_column]--;
 
@@ -86,7 +91,14 @@ run_game = function () {
                 .attr("cy", -30)
                 .attr("class", "filled")
                 .attr("r", radius-3)
-                .style("fill", "#d53e4f")
+                .style("fill", function() {
+                    if (counter == 0) {
+                        return "#d53e4f"
+                    }
+                    else {
+                        return "#e6f598"
+                    }
+                })
               .transition()
                 .duration(500)
                 .attr("cy", -5 + margin + (row_to_fill * rowHeight));
