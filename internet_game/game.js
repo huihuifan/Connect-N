@@ -54,7 +54,7 @@ run_game = function () {
 
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
                 .attr("class", "filled")
-                .style("fill", "#66c2a5");
+                .style("fill", "#d53e4f");
 
         });
 
