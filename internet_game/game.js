@@ -21,6 +21,9 @@ draw_board = function () {
         .attr("y", 0)
         .attr("width", width)
         .attr("height", height)
+        .attr("class", "board")
+        .attr("rx", 20)
+        .attr("ry", 20)
         .style("fill", "#101330");
 
     for (var rowIndex = 0; rowIndex < row_num; rowIndex++) {

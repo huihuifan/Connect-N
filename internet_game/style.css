@@ -10,10 +10,9 @@ label {
 }
 
 #page_header {
-  background-color: #bababa;
+  background-color: "white";
   height: 50px;
   margin: 0px auto 20px auto;
-  border-bottom: 2px black solid;
   font-family: Trebuchet, sans-serif;
 }
 
@@ -38,3 +37,4 @@ label {
   margin-right: auto;
   margin-left: auto;
 }
+
