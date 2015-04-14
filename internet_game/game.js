@@ -4,8 +4,12 @@ var height = 470;
 var margin = 50;
 var radius = 30;
 var svg;
+var col_num = 5;
+var row_num = 5;
+var colWidth = Math.round(width / col_num);
+var rowHeight = Math.round(height / row_num);
 
-draw_board = function (col_num, row_num) {
+draw_board = function () {
 
     svg = d3.selectAll("#game")
         .append("svg")
@@ -18,9 +22,6 @@ draw_board = function (col_num, row_num) {
         .attr("width", width)
         .attr("height", height)
         .style("fill", "#101330");
-
-    var colWidth = Math.round(width / col_num);
-    var rowHeight = Math.round(height / row_num);
 
     for (var rowIndex = 0; rowIndex < row_num; rowIndex++) {
         var yPos = -5 + margin + (rowIndex * rowHeight);
@@ -60,16 +61,20 @@ run_game = function () {
             var row_to_fill = next_open_spot[current_column]--;
 
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
+                .attr("cy", -30)
                 .attr("class", "filled")
                 .attr("r", radius-3)
-                .style("fill", "#d53e4f");
+                .style("fill", "#d53e4f")
+            .transition()
+                .duration(500)
+                .attr("cy", -5 + margin + (row_to_fill * rowHeight));
 
         });
 
 }
 
 
-draw_board (5, 5);
+draw_board ();
 run_game();
 
 
