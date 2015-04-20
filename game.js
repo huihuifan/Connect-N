@@ -56,7 +56,7 @@ run_game = function () {
 
     counter = 0;
 
-    var next_open_spot = [6, 6, 6, 6, 6];
+    var next_open_spot = [6, 6, 6, 6, 6, 6, 6];
 
     svg.selectAll(".token_spot")
         .on("mouseover", function() {
