@@ -11,12 +11,12 @@ label {
 
 #page_header {
   background-color: "white";
-  height: 50px;
+  height: 30px;
   margin: 0px auto 20px auto;
 }
 
 #page_title {
-  margin: 20px auto 0px auto;
+  margin: 0px auto 0px auto;
   line-height: 50px;
   font-size: 20px;
   text-align: center;
@@ -37,3 +37,13 @@ label {
   margin-left: auto;
 }
 
+.chooser {
+  width: 800px;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.start {
+  margin-left: 50px;
+}
