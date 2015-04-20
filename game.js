@@ -1,11 +1,11 @@
 
-var width = 700;
-var height = 470;
+var width = 800;
+var height = 580;
 var margin = 50;
 var radius = 30;
 var svg;
-var col_num = 5;
-var row_num = 5;
+var col_num = 7;
+var row_num = 7;
 var colWidth = Math.round(width / col_num);
 var rowHeight = Math.round(height / row_num);
 
@@ -27,10 +27,10 @@ draw_board = function () {
         .style("fill", "#101330");
 
     for (var rowIndex = 0; rowIndex < row_num; rowIndex++) {
-        var yPos = -5 + margin + (rowIndex * rowHeight);
+        var yPos = -10 + margin + (rowIndex * rowHeight);
 
         for (var colIndex = 0; colIndex < col_num; colIndex++) {
-            var xPos = 20 + margin + (colIndex *colWidth);
+            var xPos = 15 + margin + (colIndex *colWidth);
 
             svg.append("circle")
                 .attr("cx", xPos)
