@@ -67,7 +67,7 @@ run_game = function () {
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
                 .style("fill", function() {
                     if (counter == 0) {
-                        return "#c1e7db"
+                        return "#9bd8c5"
                     }
                     else {
                         return "#eca7ae"
@@ -115,7 +115,7 @@ run_game = function () {
                 .duration(0)
                 .style("fill", function() {
                     if (counter == 0) {
-                        return "#c1e7db"
+                        return "#9bd8c5"
                     }
                     else {
                         return "#eca7ae"
