@@ -56,7 +56,7 @@ run_game = function () {
 
     counter = 0;
 
-    var next_open_spot = [4, 4, 4, 4, 4];
+    var next_open_spot = [6, 6, 6, 6, 6];
 
     svg.selectAll(".token_spot")
         .on("mouseover", function() {
@@ -100,7 +100,7 @@ run_game = function () {
                 })
               .transition()
                 .duration(500)
-                .attr("cy", -5 + margin + (row_to_fill * rowHeight));
+                .attr("cy", -10 + margin + (row_to_fill * rowHeight));
 
             d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
               .transition()
