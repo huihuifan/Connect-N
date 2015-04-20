@@ -65,7 +65,14 @@ run_game = function () {
             var row_to_fill = next_open_spot[current_column];
 
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
-                .style("fill", "#fdae61");
+                .style("fill", function() {
+                    if (counter == 0) {
+                        return "#c1e7db"
+                    }
+                    else {
+                        return "#eca7ae"
+                    }
+                });
 
         })
         .on("mouseout", function() {
@@ -106,7 +113,14 @@ run_game = function () {
               .transition()
                 .delay(500)
                 .duration(0)
-                .style("fill", "#fdae61");
+                .style("fill", function() {
+                    if (counter == 0) {
+                        return "#c1e7db"
+                    }
+                    else {
+                        return "#eca7ae"
+                    }
+                });
 
         });
 
