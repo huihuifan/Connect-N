@@ -57,13 +57,20 @@ run_game = function () {
     counter = 0;
 
     var next_open_spot = [6, 6, 6, 6, 6, 6, 6];
+    var board = [[0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0]];
+
 
     svg.selectAll(".token_spot")
         .on("mouseover", function() {
-
             var current_column = d3.select(this).attr("column").slice(-1);
             var row_to_fill = next_open_spot[current_column];
-
+            
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
                 .style("fill", function() {
                     if (counter == 0) {
@@ -73,6 +80,7 @@ run_game = function () {
                         return "#eca7ae"
                     }
                 });
+
 
         })
         .on("mouseout", function() {
@@ -87,40 +95,52 @@ run_game = function () {
 
         })
         .on("click", function() {
+            make_move = function(current_column, row_to_fill) {
+                d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
+                    .attr("cy", -30)
+                    .attr("class", "filled")
+                    .attr("r", radius-3)
+                    .style("fill", function() {
+                        if (counter == 0) {
+                            return "#d53e4f"
+                        }
+                        else {
+                            return "#80cdc1"
+                        }
+                    })
+                    .transition()
+                    .duration(500)
+                    .attr("cy", -10 + margin + (row_to_fill * rowHeight));
+
+                d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
+                    .transition()
+                    .delay(500)
+                    .duration(0)
+                    .style("fill", function() {
+                        if (counter == 0) {
+                            return "#9bd8c5"
+                        }
+                        else {
+                            return "#eca7ae"
+                        }
+                    });
+            };
+
 
             counter = 1-counter;
 
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8000",
+                data: {}
+            }).done(function( o ) {
+                window.alert(o);
+            });
+
             var current_column = d3.select(this).attr("column").slice(-1);
             var row_to_fill = next_open_spot[current_column]--;
-
-            d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
-                .attr("cy", -30)
-                .attr("class", "filled")
-                .attr("r", radius-3)
-                .style("fill", function() {
-                    if (counter == 0) {
-                        return "#d53e4f"
-                    }
-                    else {
-                        return "#80cdc1"
-                    }
-                })
-              .transition()
-                .duration(500)
-                .attr("cy", -10 + margin + (row_to_fill * rowHeight));
-
-            d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
-              .transition()
-                .delay(500)
-                .duration(0)
-                .style("fill", function() {
-                    if (counter == 0) {
-                        return "#9bd8c5"
-                    }
-                    else {
-                        return "#eca7ae"
-                    }
-                });
+            
+            make_move(current_column, row_to_fill);
 
         });
 
