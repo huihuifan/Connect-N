@@ -71,6 +71,7 @@ run_game = function () {
             var current_column = d3.select(this).attr("column").slice(-1);
             var row_to_fill = next_open_spot[current_column];
             
+
             d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
                 .style("fill", function() {
                     if (counter == 0) {
@@ -96,6 +97,7 @@ run_game = function () {
         })
         .on("click", function() {
             make_move = function(current_column, row_to_fill) {
+                counter = 1-counter;
                 d3.select("[column=column" + current_column + "][row=row" + row_to_fill + "]")
                     .attr("cy", -30)
                     .attr("class", "filled")
@@ -127,20 +129,26 @@ run_game = function () {
             };
 
 
-            counter = 1-counter;
-
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:8000",
-                data: {}
-            }).done(function( o ) {
-                window.alert(o);
-            });
-
+            
             var current_column = d3.select(this).attr("column").slice(-1);
             var row_to_fill = next_open_spot[current_column]--;
             
+            board[current_column][6 - row_to_fill] = 1;
+
+
             make_move(current_column, row_to_fill);
+            
+            $.ajax({
+                    type: "get",
+                    url: "http://localhost:8000?stuff="+JSON.stringify(board),
+                    data: {}
+            }).done(function( o ) {
+                var next_column = o;
+                var next_row_to_fill = next_open_spot[next_column]--;
+                board[next_column][6 - next_row_to_fill] = -1;
+                make_move(next_column, next_row_to_fill);
+            });
+
 
         });
 
