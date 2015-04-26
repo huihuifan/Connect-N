@@ -140,13 +140,20 @@ run_game = function () {
             
             $.ajax({
                     type: "get",
-                    url: "http://localhost:8000?stuff="+JSON.stringify(board),
+                    url: "http://localhost:8000?stuff="+JSON.stringify(board)+"&col="+current_column,
                     data: {}
             }).done(function( o ) {
-                var next_column = o;
-                var next_row_to_fill = next_open_spot[next_column]--;
-                board[next_column][6 - next_row_to_fill] = -1;
-                make_move(next_column, next_row_to_fill);
+                if (o == -1) {
+                    window.alert("You win!");
+                } else {
+                    var next_column = o;
+                    var next_row_to_fill = next_open_spot[next_column]--;
+                    board[next_column][6 - next_row_to_fill] = -1;
+                    make_move(next_column, next_row_to_fill);
+                    if (o == -2) {
+                        window.alert("Computer wins!");
+                    }
+                }
             });
 
 
