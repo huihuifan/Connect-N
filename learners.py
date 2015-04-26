@@ -163,8 +163,8 @@ class ConnectN:
 
 class Minimax_Learner(object):
     """
-    Implementation of AI algorithm Minimax with static evaluator
-
+    Implementation of AI algorithm Minimax with static evaluator 
+    
     Inputs:
     Connect N board
     Depth- Minimax Learner will build tree of next possible moves to that depth
@@ -172,7 +172,7 @@ class Minimax_Learner(object):
     Player- player number, either 1 or -1
     Algorithm- either "minimax" or "ab" for alpha beta pruned minimax
     """
-
+    
     def __init__(self, board, depth, n, player, alg):
         self.board = board
         self.depth = depth
@@ -186,9 +186,9 @@ class Minimax_Learner(object):
         Calculates value of board states
         """
         val = 0
-        conversion = [int(math.pow(2, i))/2 for i in range(0, self.n+1)]
+        conversion = [int(i*math.pow(2, i))/2 for i in range(0, self.n+1)]
         conversion[self.n] = 20000000
-        conversion_other = [int(math.pow(2, i))/4 for i in range(0, self.n+1)]
+        conversion_other = [i*int(math.pow(2, i))/6 for i in range(0, self.n+1)]
         conversion_other[self.n] = 1000000
         for i in range(0, len(board)):
             for j in range(0, len(board[0])):
@@ -196,23 +196,23 @@ class Minimax_Learner(object):
                 if temp == self.n:
                     return conversion[temp]
                 val += conversion[temp]
-
+                
                 temp = self.board.streakHorizontal(board, i, j, self.player)
                 if temp == self.n:
                     return conversion[temp]
-                val += conversion[temp]
-
+                val += conversion[temp]    
+                
                 temp = self.board.streakDiagonalUp(board, i, j, self.player)
                 if temp == self.n:
                     return conversion[temp]
                 val += conversion[temp]
-
+                
                 temp = self.board.streakDiagonalDown(board, i, j, self.player)
                 if temp == self.n:
                     return conversion[temp]
                 val += conversion[temp]
-
-
+                
+                
                 temp = self.board.streakVertical(board, i, j, -1*self.player)
                 if temp == self.n:
                     return -1*conversion_other[temp]
@@ -232,16 +232,16 @@ class Minimax_Learner(object):
                 val -= conversion[temp]
 
         return val
-
+        
     def create_tree(self, node, depth, player, move):
         """
         Creates tree of next possible moves
-
+        
         Each node is a dict of node value, children, the board state, which player's turn it would be, and move
         """
         if depth == 0:
             return None
-
+        
         else:
             tree = {"value": 0, "children": [], "board": node, "player": player, "move": move}
 
@@ -251,51 +251,51 @@ class Minimax_Learner(object):
                 board_copy = copy.deepcopy(node)
                 board_copy.move(move, player)
                 new_child = self.create_tree(board_copy, depth-1, -1*player, move)
-
+                
                 if new_child != None:
                     tree["children"].append(new_child)
 
             return tree
 
     def children(self, node):
-        """
+        """ 
         returns children of a node
         """
         return node["children"]
-
+   
     def leaf(self, node):
         """
         returns if current node is a leaf (i.e. no children)
         """
         return len(self.children(node)) == 0
-
+        
     def max_node(self, node):
         """
         returns true if node is a max node
         """
         return node["player"] == self.player
-
+        
     def evaluate(self, node):
         """
         Static evaluator function to return a value between Loss and Win for intermediate game
         positions, larger if the position is better for the current player.
         If depth limit of the search is exceeded, is applied to remaining nodes as if
-        they were leaves.
-
-        We calculate the rating by checking each token already placed, and
+        they were leaves. 
+        
+        We calculate the rating by checking each token already placed, and 
         checking how many possible ways to connect N there are
         """
         node["value"] = self.value(node["board"].grid)
-        return node["value"]
+        return node["value"]       
 
     def minimax(self, node, depth):
-        """
-        Recursive implementation of Minimax algorithm using pseudocode from:
+        """ 
+        Recursive implementation of Minimax algorithm using pseudocode from: 
         https://www.cs.cornell.edu/courses/cs312/2002sp/lectures/rec21.htm
         """
         if self.leaf(node) or depth == 0:
             return self.evaluate(node)
-
+        
         if self.max_node(node):
             # L = -infinity
             current_node_value = -1000000000
@@ -305,7 +305,7 @@ class Minimax_Learner(object):
                     current_node_value = next_node_value
             node["value"] = current_node_value
             return current_node_value
-
+        
         if not self.max_node(node):
             # W = +infinity
             current_node_value = 10000000000
@@ -316,16 +316,16 @@ class Minimax_Learner(object):
             node["value"] = current_node_value
             return current_node_value
 
-
+        
     def ab_minimax(self, node, depth, min_val, max_val):
-        """
+        """ 
         Implementation of Minimax with Alpha Beta Pruning
-
+        
         In contrast to previous minimax algorithm, must now input min_val and max_val as well
         """
         if self.leaf(node) or depth == 0:
             return self.evaluate(node)
-
+        
         if self.max_node(node):
             current_node_value = min_val
             for child in self.children(node):
@@ -336,7 +336,7 @@ class Minimax_Learner(object):
                     return max_val
             node["value"] = current_node_value
             return current_node_value
-
+        
         if not self.max_node(node):
             current_node_value = max_val
             for child in self.children(node):
@@ -347,30 +347,31 @@ class Minimax_Learner(object):
                     return min_val
             node["value"] = current_node_value
             return current_node_value
-
+        
     def calc_next_move(self):
         """
         Calculate Minimax's Learners optimal next move
         """
         current_tree = self.create_tree(self.board, self.depth, self.player, None)
-
+        
         if self.alg == "minimax":
             top_val = self.minimax(current_tree, self.depth)
         elif self.alg == "ab":
             top_val = self.ab_minimax(current_tree, self.depth, -100000, 100000)
-
+            
         print "this is top_val", top_val
-
+                
         for child in current_tree["children"]:
             if child["value"] == top_val:
                 print "i'm here"
                 return child["move"]
-
+        
         top_val = np.min([x["value"] for x in current_tree["children"]])
         for child in current_tree["children"]:
             if child["value"] == top_val:
                 print "i'm here"
-                return child["move"]
+                return child["move"]    
+
 
 def grid_to_key(grid):
     """

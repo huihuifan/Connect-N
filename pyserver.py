@@ -45,7 +45,7 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
                 x.move(next_move, -1)
                 if (x.check_win(next_move, np.sum([abs(j) for j in x.grid[next_move]]) - 1, -1) == 1):
-                    self.wfile.write(-2)
+                    self.wfile.write(-1*next_move)
                 else:
                     self.wfile.write(next_move)
 

@@ -156,15 +156,20 @@ run_game = function () {
                     url: "http://localhost:8000?stuff="+JSON.stringify(board)+"&col="+current_column+"&agent="+agent,
                     data: {}
             }).done(function( o ) {
-                if (o == -1) {
+                if (o == -100) {
                     window.alert("You win!");
                 } else {
-                    var next_column = o;
-                    var next_row_to_fill = next_open_spot[next_column]--;
-                    board[next_column][6 - next_row_to_fill] = -1;
-                    make_move(next_column, next_row_to_fill);
-                    if (o == -2) {
-                        window.alert("Computer wins!");
+                    if (o < 0 && o != -100) {
+                        var next_column = -1*o;
+                        var next_row_to_fill = next_open_spot[next_column]--;
+                        board[next_column][6 - next_row_to_fill] = -1;
+                        make_move(next_column, next_row_to_fill);
+                        setTimeout(function(){ alert("Computer wins!"); }, 1000);
+                    } else {
+                        var next_column = o;
+                        var next_row_to_fill = next_open_spot[next_column]--;
+                        board[next_column][6 - next_row_to_fill] = -1;
+                        make_move(next_column, next_row_to_fill);
                     }
                 }
             });
