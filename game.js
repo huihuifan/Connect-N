@@ -8,6 +8,19 @@ var col_num = 7;
 var row_num = 7;
 var colWidth = Math.round(width / col_num);
 var rowHeight = Math.round(height / row_num);
+var agent = "Minimax"
+
+$('#minimax').click(function() {
+    agent = "Minimax";
+});
+
+$('#ql').click(function() {
+    agent = "QL";
+});
+
+$('#mcts').click(function() {
+    agent = "MCTS";
+});
 
 draw_board = function () {
 
@@ -140,7 +153,7 @@ run_game = function () {
             
             $.ajax({
                     type: "get",
-                    url: "http://localhost:8000?stuff="+JSON.stringify(board)+"&col="+current_column,
+                    url: "http://localhost:8000?stuff="+JSON.stringify(board)+"&col="+current_column+"&agent="+agent,
                     data: {}
             }).done(function( o ) {
                 if (o == -1) {
