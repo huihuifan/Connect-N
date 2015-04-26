@@ -29,7 +29,7 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             x.grid = np.array(arr)
             col = int(self.path[ind2 + 5:ind3])
             if (x.check_win(col, np.sum([abs(j) for j in x.grid[col]]) - 1, 1) == 1):
-                self.wfile.write(-1)
+                self.wfile.write(-100)
             else:
                 p1 = learners.Minimax_Learner(x, 3, 4, -1, "minimax")
                 next_move = p1.calc_next_move()
