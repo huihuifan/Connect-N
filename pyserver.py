@@ -29,6 +29,9 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         if (ind == -1):
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         else:
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
             arr = json.loads(self.path[ind + 6:ind2])
             x = learners.ConnectN(7,4)
             x.grid = np.array(arr)
@@ -42,9 +45,6 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     p1.interact(-50, x)
                 self.wfile.write(-100)
             else:
-                self.send_response(200)
-                self.send_header("Content-type", "text/html")
-                self.end_headers()
                 if agent == "Minimax":
                     p1 = learners.Minimax_Learner(x, 3, 4, -1, "minimax")
                     next_move = p1.calc_next_move()
