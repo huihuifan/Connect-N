@@ -368,7 +368,7 @@ class TD_Learner(object):
     Base class for Temporal Difference Learners, like Sarsa and Q learning.
     """
 
-    def __init__(self, task, value_table=None, e=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
+    def __init__(self, task, value_table=None, e_table=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
         self.task = task
         self.num_states = task.grid_size
         self.num_actions = task.grid_size
@@ -383,8 +383,8 @@ class TD_Learner(object):
         else:
             self.value_table = value_table
 
-        # same for eligibility traces
-        if e == None:
+        # same for eligibility traces (keep the traces between different runs)
+        if e_table == None:
             self.e = ConnectDict(self.num_states)
         else:
             self.e = e
@@ -424,9 +424,9 @@ class Q_Learner(TD_Learner):
     """
 
     def __init__(self, task, known_states=None, value_table=None, e=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
-        TD_Learner.__init__(self, task, value_table, e, epsilon, discount_factor, learning_rate, player, trace_size)
+        TD_Learner.__init__(self, task=task, value_table=value_table, e_table=e, epsilon=epsilon, discount_factor=discount_factor, \
+            learning_rate=learning_rate, player=player, trace_size=trace_size)
         self.known_states = known_states
-        self.e = e
 
     def calc_next_move(self, reward, next_board_state):
         if reward is None:

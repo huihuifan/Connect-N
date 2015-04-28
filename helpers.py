@@ -19,7 +19,7 @@ import agents
 '''
 Modified to not print and return the player who won
 '''
-def play_game_mod(board, p1, p2, q=False):
+def play_game_mod(board, p1, p2):
     """s
     Runs Connect 4 game given simulator object and two agents (players)
 
