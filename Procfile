@@ -1,1 +1,1 @@
-web: python pyserver.py
+web: python pyserver.py -p 8000
