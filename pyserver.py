@@ -8,7 +8,7 @@ import numpy as np
 
 import learners
 
-PORT = 8000
+PORT = 5000
 
 Q_value_table = None
 last_action = -1
