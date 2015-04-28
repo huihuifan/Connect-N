@@ -1,3 +1,5 @@
+# imports
+
 import numpy as np
 from numpy.random import rand
 import math
@@ -18,16 +20,19 @@ class ConnectN:
     def __init__(self, grid_size, n):
         self.n = n
         self.grid_size = grid_size
+
+        # initialize grid of zeros, where zero represents an empty spot on the board
         self.grid = np.zeros([grid_size,grid_size])
         self.finished = 0
         self.turn_num = 0
 
     def reset(self):
+        # clears the board
         self.__init__(self.grid_size, self.n)
 
     def check_win(self, col, row, player):
         """
-        Checks if given player has connected N tokens.
+        Checks if given player has connected N tokens
         """
         for i in range(0, self.n):
             if sum(self.grid[col, row - i:row - i + self.n]) == self.n*player:
@@ -179,12 +184,17 @@ class Minimax_Learner(object):
         self.num_states = board.grid_size
         self.player = player
         self.n = n
+
+        # either "minimax" or "ab minimax" for alpha-beta pruned Minimax
         self.alg = alg
 
     def value(self, board):
         """
-        Calculates value of board states
+        Calculates value of the current board state and passes the values to static evaluator
+
+        Player gets higher value by extending current streaks and preventing opponent from forming streaks
         """
+
         val = 0
         conversion = [int(i*math.pow(2, i))/2 for i in range(0, self.n+1)]
         conversion[self.n] = 20000000
@@ -373,6 +383,8 @@ class Minimax_Learner(object):
                 return child["move"]
 
 
+# Q Learning
+
 def grid_to_key(grid):
     """
     Converts ConnectN grid into string for dict indexing
@@ -415,8 +427,10 @@ class TD_Learner(object):
         self.discount_factor = discount_factor
         self.learning_rate = learning_rate
 
+        # if no value table, initialize an empty dict
         if value_table == None:
             self.value_table = ConnectDict(self.num_states)
+        # else use the value table that user has passed in (for pretrained Q learner)
         else:
             self.value_table = value_table
 
@@ -426,9 +440,6 @@ class TD_Learner(object):
         self.last_board_state = None
         self.last_action = None
 
-#     def reset(self):
-#         self.last_board_state = None
-#         self.last_action = None
 
     def softmax(self, next_board_state):
         """
@@ -466,7 +477,7 @@ class Q_Learner(TD_Learner):
     def interact(self, reward, next_board_state):
         if reward is None:
             # Approximation of known states. Since too many states, instead, given a board position,
-            # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and
+            # explore possible moves and give 15 reward to creating streaks of length 3 or 4 (shaping rewards) and
             # 20 reward for preventing an opponent win.
             if (self.known_states):
                 for col in task.next_possible_moves():
@@ -515,7 +526,8 @@ class Q_Learner(TD_Learner):
             return self.last_action
 
         """
-        VDBE-Softmax policy. If draw < epsilon, perform Softmax. Else do best action.
+        VDBE-Softmax policy. If draw < epsilon, perform Softmax action of drawing from weighted vector. 
+        Else do best action.
         """
         draw = np.random.uniform(0,1,1)
 
@@ -562,9 +574,11 @@ class Q_Learner(TD_Learner):
         return self.last_action
 
 
+# Monte Carlo Tree Search
+
 class Node(object):
     """
-    Define a Tree Data Structure
+    Tree data structure
     """
     def __init__(self, state, parent, action_taken):
         self.state = state
@@ -615,6 +629,10 @@ class MCTS(object):
         return self.best_child(root,0)
 
     def tree_policy(self,node):
+        """
+        Computes policy for MCTS to follow
+        """
+
         x = node
         while self.full_check_win(x.state) == False and x.state.next_possible_moves() != []:
             if list(set(x.state.next_possible_moves()) - set(x.actions)) != []:
@@ -633,8 +651,11 @@ class MCTS(object):
             return node.children[-1]
         return
 
-
     def best_child(self,node,c):
+        """
+        Finds child with highest value
+        """
+
         child_vals = [((x.total_reward)/(x.total_visit_count) + c * np.sqrt(2*np.log(node.total_visit_count)/x.total_visit_count)) for x in node.children]
         best_inx = argmax_breaking_ties_randomly(child_vals)
         best_c = node.children[best_inx]
@@ -642,6 +663,9 @@ class MCTS(object):
         return best_c.action_taken
 
     def default_policy(self,board):
+        """
+        Randomly takes an action as a default policy
+        """
         # assumes that agent is player 1
         board2 = copy.deepcopy(board)
         if self.full_check_win(board2) == True:
@@ -665,6 +689,10 @@ class MCTS(object):
                     return 0
 
     def backup(self,node,d):
+        """
+        Propagates values back up the MCTS tree
+        """
+
         v = node
         while v != None:
             v.total_visit_count = v.total_visit_count + 1

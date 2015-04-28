@@ -1,3 +1,5 @@
+# imports
+
 from __future__ import division
 import numpy as np
 from numpy.random import rand
@@ -14,7 +16,6 @@ get_ipython().magic(u'matplotlib inline')
 import simulator
 import agents
 
-# TODO (LUCY): CLEAN THIS UP
 '''
 MODIFIED TO (NOT PRINT) AND (RETURN INDICATOR OF WINNER)
 '''

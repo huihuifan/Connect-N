@@ -1,3 +1,4 @@
+# imports
 from __future__ import division
 import numpy as np
 from numpy.random import rand
@@ -17,12 +18,13 @@ class ConnectN:
     Inputs:
     Grid size- creates a grid size x grid size square board
     N- number of tokens a player must connect to win the game
-
     """
 
     def __init__(self, grid_size, n):
         self.n = n
         self.grid_size = grid_size
+
+        # initializes board with zero, which represents empty token
         self.grid = np.zeros([grid_size,grid_size])
         self.finished = 0
         self.turn_num = 0
