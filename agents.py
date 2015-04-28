@@ -367,34 +367,27 @@ class TD_Learner(object):
     """
     Base class for Temporal Difference Learners, like Sarsa and Q learning.
     """
-
-    def __init__(self, task, value_table=None, e_table=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
-        self.task = task
+    
+    def __init__(self, task, value_table=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
+        
         self.num_states = task.grid_size
         self.num_actions = task.grid_size
         self.epsilon = epsilon
         self.discount_factor = discount_factor
         self.learning_rate = learning_rate
-
-        # if value table is none, initialize empty dict
+        
         if value_table == None:
             self.value_table = ConnectDict(self.num_states)
-        # else continue learning with user-passed value table (to pretrain the Q learner)
         else:
             self.value_table = value_table
-
-        # same for eligibility traces (keep the traces between different runs)
-        if e_table == None:
-            self.e = ConnectDict(self.num_states)
-        else:
-            self.e = e_table
-
+            
+        self.e = ConnectDict(self.num_states)
         self.player = player
         self.trace_size = trace_size
         self.last_board_state = None
         self.last_action = None
 
-
+    
     def softmax(self, next_board_state):
         """
         Implementation of Softmax Policy, which weights towards better actions rather
@@ -420,21 +413,20 @@ class TD_Learner(object):
 
 class Q_Learner(TD_Learner):
     """
-    Implementation of Q Learning, inheriting from TD Learner base class.
+    Implementation of Q Learning, inheriting from TD Learner base class. 
     """
-
-    def __init__(self, task, known_states=None, value_table=None, e=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
-        TD_Learner.__init__(self, task=task, value_table=value_table, e_table=e, epsilon=epsilon, discount_factor=discount_factor, \
-            learning_rate=learning_rate, player=player, trace_size=trace_size)
+    
+    def __init__(self, task, value_table, known_states, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):   
+        TD_Learner.__init__(self, task, value_table, epsilon, discount_factor, learning_rate, player, trace_size) 
         self.known_states = known_states
 
-    def calc_next_move(self, reward, next_board_state):
+    def interact(self, reward, next_board_state):
         if reward is None:
-            # Approximation of known states. Since too many states, instead, given a board position,
-            # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and
+            # Approximation of known states. Since too many states, instead, given a board position, 
+            # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and 
             # 20 reward for preventing an opponent win.
             if (self.known_states):
-                for col in self.task.next_possible_moves():
+                for col in task.next_possible_moves():
                     row = np.sum([abs(x) for x in next_board_state.grid[col]])
                     if next_board_state.streakVertical(next_board_state.grid, col, row - 2, self.player) >= 2:
                         self.value_table[grid_to_key(next_board_state.grid)][col] = 15
@@ -447,7 +439,7 @@ class Q_Learner(TD_Learner):
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 15
                         if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, self.player) >= 3:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 15
-
+                            
                     if next_board_state.streakVertical(next_board_state.grid, col, row - 3, -self.player) == 3:
                         self.value_table[grid_to_key(next_board_state.grid)][col] = 20
                     temp_board = deepcopy(next_board_state.grid)
@@ -465,16 +457,15 @@ class Q_Learner(TD_Learner):
             self.last_board_state = next_board_state.grid
             self.last_action = next_action
             return self.last_action
-
+                
         if reward == 50:
             delta = delta = reward - self.value_table[grid_to_key(self.last_board_state)][self.last_action]
             self.value_table[grid_to_key(self.last_board_state)][self.last_action] += self.learning_rate * delta
-
+            
             return self.last_action
-
+        
         """
-        VDBE-Softmax policy. If draw < epsilon, perform Softmax, drawing from weighted action vector. 
-        Else do best action.
+        VDBE-Softmax policy. If draw < epsilon, perform Softmax. Else do best action.
         """
         draw = np.random.uniform(0,1,1)
 
@@ -486,7 +477,7 @@ class Q_Learner(TD_Learner):
         # Update value function.
         delta = reward + self.discount_factor * np.amax(self.value_table[grid_to_key(next_board_state.grid)]) - self.value_table[grid_to_key(self.last_board_state)][self.last_action]
         self.value_table[grid_to_key(self.last_board_state)][self.last_action] += self.learning_rate * delta
-
+        
         # Update eligibility traces (Watson's Q(lambda))
         self.e[grid_to_key(self.last_board_state)][self.last_action] += 1
 
@@ -495,28 +486,31 @@ class Q_Learner(TD_Learner):
         # Instead we consider all next possible board states and update those (for easier computation)
         next_possible_moves = next_board_state.next_possible_moves()
         next_possible_boards = []
-
+        
         for i in next_possible_moves:
             temp_board = deepcopy(next_board_state)
             temp_board.move(next_action, self.player)
             next_possible_boards.append(temp_board)
-
+            
         for board in next_possible_boards:
             valid_actions = board.next_possible_moves()
             for action in valid_actions:
-                self.value_table[grid_to_key(board.grid)][action] += self.learning_rate * delta                                                                     * self.e[grid_to_key(board.grid)][action]
+                self.value_table[grid_to_key(board.grid)][action] += self.learning_rate * delta \
+                                                                    * self.e[grid_to_key(board.grid)][action]
                 if self.last_action == action:
-                    self.e[grid_to_key(board.grid)][action] = self.discount_factor * self.trace_size                                                                     * self.e[grid_to_key(board.grid)][action]
+                    self.e[grid_to_key(board.grid)][action] = self.discount_factor * self.trace_size \
+                                                                    * self.e[grid_to_key(board.grid)][action]
                 else:
                     self.e[grid_to_key(board.grid)][action] = 0
-
+                    
         self.last_board_state = next_board_state.grid
         self.last_action = next_action
 
         if next_board_state.simulate_move(self.last_action, self.player) == 1:
             self.last_action = self.softmax(next_board_state)
-
+            
         return self.last_action
+
 
 
 ###########################
