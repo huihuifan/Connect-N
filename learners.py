@@ -509,8 +509,6 @@ class Q_Learner(TD_Learner):
 
 
         if reward == -50:
-            print self.last_action
-            print self.last_board_state
             delta = delta = reward - self.value_table[grid_to_key(self.last_board_state)][self.last_action]
             self.value_table[grid_to_key(self.last_board_state)][self.last_action] += self.learning_rate * delta
 
