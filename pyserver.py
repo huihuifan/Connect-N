@@ -60,6 +60,7 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                         p1.interact(50, x)
                     self.wfile.write(-1*next_move)
                 else:
+                    print next_move
                     self.wfile.write(next_move)
 
 
