@@ -19,7 +19,7 @@ import agents
 Modified to not print and return the player who won
 '''
 def play_game_mod(board, p1, p2):
-    """s
+    """
     Runs Connect 4 game given simulator object and two agents (players)
 
     Returns player number who has won
@@ -51,6 +51,62 @@ def play_game_mod(board, p1, p2):
             board.print_grid()
             print("error player 2")
             return -1, 0
+
+
+def run_many_games(x, p1, p2, games):
+    """
+    Run multiple games
+    """
+    p1_wins = 0
+    p2_wins = 0
+    draws = 0
+    history = []
+    for i in xrange(0,games):
+        x.reset()
+        ret, winner = play_game_mod(x, p1, p2)
+        history.append(winner)
+        if winner == 1:
+            p1_wins = p1_wins + 1
+        if winner == -1:
+            p2_wins = p2_wins + 1 
+        if winner == 0:
+            draws = draws + 1
+        #print(winner)
+    #print(p1_wins, p2_wins, draws)
+    return p1_wins, p2_wins, draws, history
+
+def parallel_MCTS_explore(i):
+    """
+    Helper for running the MCTS exploration term GridSearch in parallel
+    """
+    games = 100
+    x = ConnectN(5, 3)
+    p1 = Random_Learner(x) 
+    p2 = MCTS(x, 100,i)
+    #p2 = Random_Learner(x)
+    p1_wins, p2_wins, draws, history = run_multiple_games(x, p1, p2, games)
+    print(i)
+    return p2_wins/games
+
+
+def select_MCTS_exploreterm():
+    """
+    Runs the MCTS exploration term GridSearch
+    """
+    exp_term_range = np.array(range(0,11))/10.0
+    if __name__ == '__main__':
+        pool = Pool()  # start all workers
+        win_rate = pool.map(parallel_MCTS_explore, exp_term_range)
+        win_rate = np.array(win_rate)
+    plt.plot(exp_term_range, win_rate)    
+    plt.title('MCTS Exploration Term Grid Search')
+    plt.xlabel('Exploration Term Value')
+    plt.ylabel('Win-rate against Random_Learner')
+    plt.xlim(0,1)
+    plt.ylim(0,1)
+    plt.grid()
+    plt.savefig('MCTS_param.png', dpi=1000)
+    return exp_term_range, win_rate
 
 
 
