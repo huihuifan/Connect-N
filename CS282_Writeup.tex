@@ -27,31 +27,69 @@
 
 \begin{document}
 
-\title{\TitleFont \textbf{ \\}}
+\title{\TitleFont \textbf{Connect N:\\ A Reinforcement Learning Approach}}
 \author{\TitleFont Lucy Cheng, Angela Fan, Andre Nguyen}
 \maketitle
 
 \vspace{-1.5cm}
 
-\section*{Andre, can you retitle these headings? thanks}
+\section*{ALL FIGURES NEED CAPTIONS STILL}
 
-\section{high level description of the problem- Andre}
+\section{Problem Description}
 
-\section{detailed description of simulator inputs and outputs- Lucy}
+The problem we chose to work on is that of the classic children's game, Connect-4, but extrapolated to be "Connect-N", where players strive to create streaks of length N with their tokens, while stopping their opponent from creating N-length streaks.
+
+\section{Simulator and Driver Function Descriptions}
+
+The \textbf{simulator} takes two inputs:
+\begin{enumerate}
+\item \textbf{n}, the number of tokens that must be connected by a player to win
+\item \textbf{grid\_size}, the height of the square board that will be created by the simulator
+\end{enumerate}
+
+The simulator initializes a nested NumPy array of zeroes, where each nested array is a row of the board. Zero represents an empty state. Players 1 and -1 can tell the simulator to make a move by calling the simulator's move method. The board state then adds a 1 or -1 (depending on the player) in the correct spot. When the move method is called, the simulator automatically checks if a player has won. 
+
+The move function returns:
+
+\begin{enumerate}
+\item 1 if the current player making a move has won
+\item -1 if the current player making a move is trying to make an illegal move (for example: column does not exist, column is already full)
+\item 0 otherwise
+\end{enumerate}
+
+and a reward:
+\begin{enumerate}
+\item 50 if the current player making a move has won
+\item 0 otherwise
+\end{enumerate}
+
+The simulator has a number of helper methods as well:
+\begin{enumerate}
+\item \textbf{simulate\_move}, which tests to see if a move is valid and returns 1 if not valid
+\item \textbf{turn}, which returns whose turn it is 
+\item \textbf{next\_possible\_moves}, which returns an array of all possible columns available for a next move (i.e. eliminates columns that are full)
+\item \textbf{all\_tokens\_placed}, which returns the location as a (column, row) tuple of all of the tokens that have been placed					
+\item \textbf{is\_empty}- takes in a location and returns True if the location is empty and False otherwise
+\item \textbf{streak} functions that check if a given player has a horizontal, vertical, or diagonal streak going
+\item \textbf{print\_grid}, which prints the current board state
+\end{enumerate}
+
+We have written a separate function, called \textbf{play\_game}, that serves as a driver function to run the Connect N game (diagrammed in \textbf{Figure 1}).  The driver function takes as input two learners, and uses the Connect N simulator to create a game. The game asks each learner for an action and takes the specified moves. If neither player has won, it continues the game by passing reward and the new board state back to the learners.
 
 \includegraphics[scale=.7]{game_process.png}
 
-\section{detailed description of state and action space including features, table with explanations as to why you encoded the state and action space they way you did is sufficient- everyone (andre)}
+\section{State and Action Spaces}
 
-\section{detailed description of your results/comparisons- everyone- wait for results}
+Possible \textbf{actions} are integers representing the numerical column number that a player wishes to put their token into.
 
-\section{thorough description of why you got the results you did, a few pages- everyone- wait for results}
+The \textbf{states} are boards, represented as NumPy arrays (see Figure 2).
 
+\includegraphics[scale=.7]{matrix.png} 
 
 \section{Approaches}
 \textbf{THIS IS COMBINED MOTIVATION FOR APPROACHES + DETAILED DESCRIPTION OF APPROACHES}
 
-\includegraphics[scale=.4]{learners.png}
+\includegraphics[scale=.5]{learners.png}
 
 \subsubsection{Baselines} 
 
@@ -96,6 +134,11 @@ To pre-train the Q learner, we pass the board state between different games, all
 \subsubsection{Monte Carlo Tree Search- andre} 
 
 
+\section{detailed description of your results/comparisons- everyone- wait for results}
+
+\section{thorough description of why you got the results you did, a few pages- everyone- wait for results}
+
+
 \section{Future Work}
 
 Interesting research questions for the future could include:
@@ -106,6 +149,7 @@ Interesting research questions for the future could include:
 \item Adding stochasticity to the board, such as dropping the bottom row with some probability or having a probability of taking the wrong action
 \item Coding the board state as a POMDP, with information such as the number of tokens in a row, but not knowing exactly where the tokens are 
 \end{enumerate}
+
 
 
 \end{document}
