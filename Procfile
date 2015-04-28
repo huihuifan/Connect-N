@@ -1,1 +1,1 @@
-web: python pyserver.py -p 5000
+web: python pyserver.py $PORT
