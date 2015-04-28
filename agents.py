@@ -352,16 +352,15 @@ class ConnectDict(dict):
     Takes in a number of states.
     Adds keys to dict each time lookup is necessary to avoid full dict initialization.
     """
-
+    
     def __init__(self, num_states, *arg, **kw):
         self.num_states = num_states
         super(ConnectDict, self).__init__(*arg, **kw)
-
+        
     def __getitem__(self, key):
         if not dict.__contains__(self, key):
             dict.__setitem__(self, key, np.zeros(self.num_states))
         return dict.__getitem__(self, key)
-
 
 class TD_Learner(object):
     """
@@ -420,7 +419,7 @@ class Q_Learner(TD_Learner):
         TD_Learner.__init__(self, task, value_table, epsilon, discount_factor, learning_rate, player, trace_size) 
         self.known_states = known_states
 
-    def interact(self, reward, next_board_state):
+    def calc_next_move(self, reward, next_board_state):
         if reward is None:
             # Approximation of known states. Since too many states, instead, given a board position, 
             # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and 
