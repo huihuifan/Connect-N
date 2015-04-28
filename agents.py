@@ -13,14 +13,10 @@ get_ipython().magic(u'matplotlib inline')
 
 import simulator
 
-# ## Agents
 
-# ### Minimax
-
-# Minimax with depth past 6 takes a long time to make a move, seems not necessary
-# Minimax depth 5 is "hard"
-# Minimax depth 3 is "medium"
-# Minimax depth 1 is "easy"
+###########
+# Minimax #
+###########
 
 class Minimax_Learner(object):
     """
@@ -44,7 +40,10 @@ class Minimax_Learner(object):
 
     def value(self, board):
         """
-        Calculates value of board states
+        Calculates value of board states, called by static evaluator.
+
+        Board states have higher value if player extends his/her own streak,
+        while stopping opponent streak
         """
         val = 0
         conversion = [int(i*math.pow(2, i))/2 for i in range(0, self.n+1)]
@@ -209,7 +208,7 @@ class Minimax_Learner(object):
             node["value"] = current_node_value
             return current_node_value
 
-    def calc_next_move(self):
+    def calc_next_move(self, reward=None, board=None):
         """
         Calculate Minimax's Learners optimal next move
         """
@@ -234,7 +233,9 @@ class Minimax_Learner(object):
                 return child["move"]
 
 
-# ### Random Agent
+################
+# Random Agent #
+################
 
 class Random_Learner(object):
     """
@@ -245,24 +246,25 @@ class Random_Learner(object):
         self.board = board
 
 
-    def calc_next_move(self):
+    def calc_next_move(self, reward=None, board=None):
         moves = self.board.next_possible_moves()
         return moves[random.randint(0, len(moves) - 1)]
 
 
-# ### Naive Extending Learner
+###################
+# Extending Agent #
+###################
 
 class Extend_Learner(object):
     """
-    Implementation of naive algorithm that tries to extend longest streak. Prioritizes vertical streaks.
+    Implementation of naive algorithm that tries to extend longest streak in all four directions
+    Prioritizes vertical streaks.
 
     Inputs:
-    Connect N board
-    Depth- Minimax Learner will build tree of next possible moves to that depth
-    N- number of tokens that need to be connected for a player to win
-    Player- player number, either 1 or -1
-    Algorithm- either "minimax" or "ab" for alpha beta pruned minimax
-
+    Board- Connect N simulator object
+    Depth- How far the Extend Learner should look
+    N- how many tokens the player must connect to win
+    Player- player number 
     """
 
     def __init__(self, board, depth, n, player):
@@ -272,15 +274,17 @@ class Extend_Learner(object):
         self.player = player
         self.n = n
 
-
     def get_max(self, d):
+        """
+        Gets next move with max value
+        """
         maxval = max(d)
         options = [x for x in range(0, len(d)) if d[x] == maxval]
         return options[random.randint(0, len(options) - 1)]
 
-    def calc_next_move(self):
+    def calc_next_move(self, reward=None, board=None):
         """
-        Calculate Minimax's Learners optimal next move
+        From Minimax. Calculates next possible moves.
         """
         max_len = 0
         board = self.board.grid
@@ -324,7 +328,9 @@ class Extend_Learner(object):
         return self.get_max(max_cols)
 
 
-# ### Q-Learner
+##############
+# Q Learning #
+##############
 
 def grid_to_key(grid):
     """
@@ -346,62 +352,58 @@ class ConnectDict(dict):
     Takes in a number of states.
     Adds keys to dict each time lookup is necessary to avoid full dict initialization.
     """
-
+    
     def __init__(self, num_states, *arg, **kw):
         self.num_states = num_states
         super(ConnectDict, self).__init__(*arg, **kw)
-
+        
     def __getitem__(self, key):
         if not dict.__contains__(self, key):
             dict.__setitem__(self, key, np.zeros(self.num_states))
         return dict.__getitem__(self, key)
 
-
 class TD_Learner(object):
     """
     Base class for Temporal Difference Learners, like Sarsa and Q learning.
     """
-
+    
     def __init__(self, task, value_table=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
-        self.task = task
+        
         self.num_states = task.grid_size
         self.num_actions = task.grid_size
         self.epsilon = epsilon
         self.discount_factor = discount_factor
         self.learning_rate = learning_rate
-
+        
         if value_table == None:
             self.value_table = ConnectDict(self.num_states)
         else:
             self.value_table = value_table
-
+            
         self.e = ConnectDict(self.num_states)
         self.player = player
         self.trace_size = trace_size
         self.last_board_state = None
         self.last_action = None
 
-#     def reset(self):
-#         self.last_board_state = None
-#         self.last_action = None
-
+    
     def softmax(self, next_board_state):
         """
         Implementation of Softmax Policy, which weights towards better actions rather
         than sampling uniformly across all possible actions (epsilon-greedy)
         """
-
+        
         def weighted_pick(weights,n_picks):
             t = np.cumsum(weights)
             s = sum(weights)
             return np.searchsorted(t,rand(n_picks)*s)
-
+        
         tau = .5
         key_val = grid_to_key(next_board_state.grid)
-
+        
         vals = self.value_table[key_val]
         num = ([math.e**(float(x)/tau) for x in vals])
-
+        
         probs = [x/sum(num) for x in num]
         best_action = weighted_pick(probs, 1)
 
@@ -410,21 +412,20 @@ class TD_Learner(object):
 
 class Q_Learner(TD_Learner):
     """
-    Implementation of Q Learning, inheriting from TD Learner base class.
+    Implementation of Q Learning, inheriting from TD Learner base class. 
     """
-
-    def __init__(self, task, value_table, known_states, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
-        TD_Learner.__init__(self, task, value_table, epsilon, discount_factor, learning_rate, player, trace_size)
+    
+    def __init__(self, task, value_table, known_states, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):   
+        TD_Learner.__init__(self, task, value_table, epsilon, discount_factor, learning_rate, player, trace_size) 
         self.known_states = known_states
 
-
-    def interact(self, reward, next_board_state):
+    def calc_next_move(self, reward, next_board_state):
         if reward is None:
-            # Approximation of known states. Since too many states, instead, given a board position,
-            # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and
+            # Approximation of known states. Since too many states, instead, given a board position, 
+            # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and 
             # 20 reward for preventing an opponent win.
             if (self.known_states):
-                for col in self.task.next_possible_moves():
+                for col in task.next_possible_moves():
                     row = np.sum([abs(x) for x in next_board_state.grid[col]])
                     if next_board_state.streakVertical(next_board_state.grid, col, row - 2, self.player) >= 2:
                         self.value_table[grid_to_key(next_board_state.grid)][col] = 15
@@ -437,7 +438,7 @@ class Q_Learner(TD_Learner):
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 15
                         if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, self.player) >= 3:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 15
-
+                            
                     if next_board_state.streakVertical(next_board_state.grid, col, row - 3, -self.player) == 3:
                         self.value_table[grid_to_key(next_board_state.grid)][col] = 20
                     temp_board = deepcopy(next_board_state.grid)
@@ -455,13 +456,13 @@ class Q_Learner(TD_Learner):
             self.last_board_state = next_board_state.grid
             self.last_action = next_action
             return self.last_action
-
+                
         if reward == 50:
             delta = delta = reward - self.value_table[grid_to_key(self.last_board_state)][self.last_action]
             self.value_table[grid_to_key(self.last_board_state)][self.last_action] += self.learning_rate * delta
-
+            
             return self.last_action
-
+        
         """
         VDBE-Softmax policy. If draw < epsilon, perform Softmax. Else do best action.
         """
@@ -475,7 +476,7 @@ class Q_Learner(TD_Learner):
         # Update value function.
         delta = reward + self.discount_factor * np.amax(self.value_table[grid_to_key(next_board_state.grid)]) - self.value_table[grid_to_key(self.last_board_state)][self.last_action]
         self.value_table[grid_to_key(self.last_board_state)][self.last_action] += self.learning_rate * delta
-
+        
         # Update eligibility traces (Watson's Q(lambda))
         self.e[grid_to_key(self.last_board_state)][self.last_action] += 1
 
@@ -484,33 +485,36 @@ class Q_Learner(TD_Learner):
         # Instead we consider all next possible board states and update those (for easier computation)
         next_possible_moves = next_board_state.next_possible_moves()
         next_possible_boards = []
-
+        
         for i in next_possible_moves:
             temp_board = deepcopy(next_board_state)
             temp_board.move(next_action, self.player)
             next_possible_boards.append(temp_board)
-
+            
         for board in next_possible_boards:
             valid_actions = board.next_possible_moves()
             for action in valid_actions:
-                self.value_table[grid_to_key(board.grid)][action] += self.learning_rate * delta                                                                     * self.e[grid_to_key(board.grid)][action]
+                self.value_table[grid_to_key(board.grid)][action] += self.learning_rate * delta \
+                                                                    * self.e[grid_to_key(board.grid)][action]
                 if self.last_action == action:
-                    self.e[grid_to_key(board.grid)][action] = self.discount_factor * self.trace_size                                                                     * self.e[grid_to_key(board.grid)][action]
+                    self.e[grid_to_key(board.grid)][action] = self.discount_factor * self.trace_size \
+                                                                    * self.e[grid_to_key(board.grid)][action]
                 else:
                     self.e[grid_to_key(board.grid)][action] = 0
-
+                    
         self.last_board_state = next_board_state.grid
         self.last_action = next_action
 
         if next_board_state.simulate_move(self.last_action, self.player) == 1:
             self.last_action = self.softmax(next_board_state)
-
+            
         return self.last_action
 
 
-# ### MCTS
 
-# In[11]:
+###########################
+# Monte Carlo Tree Search #
+###########################
 
 class Node(object):
     """
@@ -541,7 +545,7 @@ class MCTS(object):
     def reset(self):
         self.__init__(self.max_iter, self.C)
 
-    def calc_next_move(self):
+    def calc_next_move(self, reward=None, board=None):
         return self.uct_search(self.board)
 
     def full_check_win(self,board):
@@ -602,13 +606,14 @@ class MCTS(object):
         return
 
     def argmax_breaking_ties_randomly(self, x):
+        # Ken's breaking ties function
         max_value = np.max(x)
         indices_with_max_value = np.flatnonzero(x == max_value)
         return np.random.choice(indices_with_max_value)
 
 
-
     def best_child(self,node,c):
+
         child_vals = [((x.total_reward)/(x.total_visit_count) + c * np.sqrt(2*np.log(node.total_visit_count)/x.total_visit_count)) for x in node.children]
         best_inx = self.argmax_breaking_ties_randomly(child_vals)
         best_c = node.children[best_inx]
@@ -616,6 +621,9 @@ class MCTS(object):
         return best_c.action_taken, best_inx
 
     def default_policy(self,board):
+        """
+        Default Policy to take a random action
+        """
         if board.turn() == 1:
             # assumes that agent is player 1
             board2 = copy.deepcopy(board)
@@ -690,6 +698,9 @@ class MCTS(object):
                         return 0
 
     def backup(self,node,d):
+        """
+        Propagates value back up the tree
+        """
         v = node
         while v != None:
             v.total_visit_count = v.total_visit_count + 1
