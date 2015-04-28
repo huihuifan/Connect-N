@@ -519,9 +519,9 @@ class Q_Learner(TD_Learner):
         return self.last_action
 
 
-##########################
-# Monte Carlo Tree Seach #
-##########################
+###########################
+# Monte Carlo Tree Search #
+###########################
 
 class Node(object):
     """
