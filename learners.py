@@ -1,5 +1,5 @@
 # imports
-
+from __future__ import division
 import numpy as np
 from numpy.random import rand
 import math
@@ -7,6 +7,8 @@ from random import randint
 import itertools
 import random
 import copy
+from copy import deepcopy
+from multiprocessing import Pool
 
 class ConnectN:
     """
