@@ -589,26 +589,32 @@ class Node(object):
         self.total_reward = 0
         self.total_visit_count = 0.000001
 
-# Ken's break ties function.
 def argmax_breaking_ties_randomly(x):
+    """
+    Ken's break ties Argmax function
+    """
     max_value = np.max(x)
     indices_with_max_value = np.flatnonzero(x == max_value)
     return np.random.choice(indices_with_max_value)
 
 class MCTS(object):
     """
-    Monte Carlo Tree Search
-    UCT algorithm from "A Survey of Monte Carlo Tree Search Methods
-
-    Node is Agent's move, next move is enemy
-    """
-    def __init__(self, max_iter, C):
+    Monte Carlo Tree Search 
+    UCT algorithm from "A Survey of Monte Carlo Tree Search Methods"
+    
+    Node is Agent's move, next move is opponent
+    """    
+    def __init__(self, board, max_iter, C):
+        self.board = board
         self.max_iter = max_iter
         self.C = C
-
+        
     def reset(self):
         self.__init__(self.max_iter, self.C)
-
+        
+    def calc_next_move(self):
+        return self.uct_search(self.board)
+        
     def full_check_win(self,board):
         for col in xrange(0,board.grid_size):
             for row in xrange(0,board.grid_size):
@@ -617,8 +623,20 @@ class MCTS(object):
                 if board.check_win(col, row, -1) == 1:
                     return True
         return False
-
+        
     def uct_search(self,board):
+        # check for immediate win
+        for i in board.next_possible_moves():
+            b2 = copy.deepcopy(board)
+            if b2.turn() == 1:
+                b2.move(i, 1)
+                if self.full_check_win(b2):
+                    return i
+            if b2.turn() == -1:
+                b2.move(i, -1)
+                if self.full_check_win(b2):
+                    return i
+        # regular uct_search
         iterator = 0
         root = Node(board, None, None)
         while iterator < self.max_iter:
@@ -626,77 +644,120 @@ class MCTS(object):
             d = self.default_policy(c_node.state)
             self.backup(c_node,d)
             iterator = iterator + 1
-        return self.best_child(root,0)
-
+        return self.best_child(root,0)[0]
+        
     def tree_policy(self,node):
-        """
-        Computes policy for MCTS to follow
-        """
-
         x = node
         while self.full_check_win(x.state) == False and x.state.next_possible_moves() != []:
             if list(set(x.state.next_possible_moves()) - set(x.actions)) != []:
                 return self.expand(x)
-            else:
-                x = x.children[self.best_child(x,self.C)]
+            else: 
+                x = x.children[self.best_child(x,self.C)[1]]
         return x
-
+    
     def expand(self,node):
         untried = list(set(node.state.next_possible_moves()) - set(node.actions))
-        if untried != []:
-            child = copy.deepcopy(node)
-            child.state.move(untried[0],1)
-            node.children.append(Node(child.state, node, untried[0]))
-            node.actions.append(untried[0])
-            return node.children[-1]
-        return
+        if untried != []: 
+            if node.state.turn() == 1:
+                child = copy.deepcopy(node)
+                child.state.move(untried[0],1)
+                node.children.append(Node(child.state, node, untried[0]))
+                node.actions.append(untried[0])
+                return node.children[-1]
+            if node.state.turn() == -1:
+                child = copy.deepcopy(node)
+                child.state.move(untried[0],-1)
+                node.children.append(Node(child.state, node, untried[0]))
+                node.actions.append(untried[0])
+                return node.children[-1]
+        return 
 
+    
     def best_child(self,node,c):
-        """
-        Finds child with highest value
-        """
-
         child_vals = [((x.total_reward)/(x.total_visit_count) + c * np.sqrt(2*np.log(node.total_visit_count)/x.total_visit_count)) for x in node.children]
-        best_inx = argmax_breaking_ties_randomly(child_vals)
+        best_inx = argmax_breaking_ties_randomly(child_vals)  
         best_c = node.children[best_inx]
         #print(child_vals)
-        return best_c.action_taken
-
+        return best_c.action_taken, best_inx
+        
     def default_policy(self,board):
-        """
-        Randomly takes an action as a default policy
-        """
-        # assumes that agent is player 1
-        board2 = copy.deepcopy(board)
-        if self.full_check_win(board2) == True:
-            return 50
-        while True:
-            if board2.turn() == -1:
-                # imagined enemy
-                action2 = np.random.choice(board2.next_possible_moves())
-                board2.move(action2, -1)
-                if self.full_check_win(board2) == True:
-                    return -50
-                if board2.next_possible_moves() == []:
-                    return 0
-            # agent
-            if board2.turn() == 1:
-                action = np.random.choice(board2.next_possible_moves())
-                board2.move(action, 1)
-                if self.full_check_win(board2) == True:
-                    return 50
-                if board2.next_possible_moves() == []:
-                    return 0
-
+        if board.turn() == 1:
+            # assumes that agent is player 1
+            board2 = copy.deepcopy(board)
+            if self.full_check_win(board2) == True:
+                return 50
+            while True:                
+                if board2.turn() == -1:
+                    # imagined enemy                        
+                    action2 = np.random.choice(board2.next_possible_moves())
+                    # check win
+                    for i in board2.next_possible_moves():
+                        b2 = copy.deepcopy(board2)
+                        b2.move(i, -1)
+                        if self.full_check_win(b2):
+                            action2 = i 
+                    # else random
+                    board2.move(action2, -1)
+                    if self.full_check_win(board2) == True:
+                        return -50
+                    if board2.next_possible_moves() == []:
+                        return 0
+                # agent
+                if board2.turn() == 1:
+                    action = np.random.choice(board2.next_possible_moves())
+                    # check win
+                    for i in board2.next_possible_moves():
+                        b2 = copy.deepcopy(board2)
+                        b2.move(i, 1)
+                        if self.full_check_win(b2):
+                            action = i 
+                    # else random
+                    board2.move(action, 1)
+                    if self.full_check_win(board2) == True:
+                        return 50
+                    if board2.next_possible_moves() == []:
+                        return 0        
+        if board.turn() == -1:
+            # assumes that agent is player -1
+            board2 = copy.deepcopy(board)
+            if self.full_check_win(board2) == True:
+                return 50
+            while True:
+                if board2.turn() == 1:
+                    # imagined enemy
+                    action2 = np.random.choice(board2.next_possible_moves())
+                    # check win
+                    for i in board2.next_possible_moves():
+                        b2 = copy.deepcopy(board2)
+                        b2.move(i, 1)
+                        if self.full_check_win(b2):
+                            action2 = i 
+                    # else random
+                    board2.move(action2, 1)
+                    if self.full_check_win(board2) == True:
+                        return -50
+                    if board2.next_possible_moves() == []:
+                        return 0
+                # agent
+                if board2.turn() == -1:
+                    action = np.random.choice(board2.next_possible_moves())
+                    # check win
+                    for i in board2.next_possible_moves():
+                        b2 = copy.deepcopy(board2)
+                        b2.move(i, -1)
+                        if self.full_check_win(b2):
+                            action = i 
+                    # else random
+                    board2.move(action, -1)
+                    if self.full_check_win(board2) == True:
+                        return 50
+                    if board2.next_possible_moves() == []:
+                        return 0
+            
     def backup(self,node,d):
-        """
-        Propagates values back up the MCTS tree
-        """
-
-        v = node
+        v = node 
         while v != None:
             v.total_visit_count = v.total_visit_count + 1
             v.total_reward = v.total_reward + d
             v = v.parent
         return
-
