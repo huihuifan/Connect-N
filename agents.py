@@ -428,7 +428,7 @@ class Q_Learner(TD_Learner):
         self.known_states = known_states
 
 
-    def interact(self, reward, next_board_state):
+    def calc_next_move(self, reward, next_board_state):
         if reward is None:
             # Approximation of known states. Since too many states, instead, given a board position,
             # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and
