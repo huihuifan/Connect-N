@@ -384,7 +384,7 @@ class TD_Learner(object):
             self.value_table = value_table
 
         # same for eligibility traces
-        if self.e == None:
+        if e == None:
             self.e = ConnectDict(self.num_states)
         else:
             self.e = e
@@ -426,7 +426,7 @@ class Q_Learner(TD_Learner):
     def __init__(self, task, known_states=None, value_table=None, e=None, epsilon=.1, discount_factor=.9, learning_rate=.5, player=1, trace_size=.1):
         TD_Learner.__init__(self, task, value_table, e, epsilon, discount_factor, learning_rate, player, trace_size)
         self.known_states = known_states
-
+        self.e = e
 
     def calc_next_move(self, reward, next_board_state):
         if reward is None:
