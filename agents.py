@@ -208,7 +208,7 @@ class Minimax_Learner(object):
             node["value"] = current_node_value
             return current_node_value
 
-    def calc_next_move(self):
+    def calc_next_move(self, reward=None, board=None):
         """
         Calculate Minimax's Learners optimal next move
         """
@@ -246,7 +246,7 @@ class Random_Learner(object):
         self.board = board
 
 
-    def calc_next_move(self):
+    def calc_next_move(selfm reward=None, board=None):
         moves = self.board.next_possible_moves()
         return moves[random.randint(0, len(moves) - 1)]
 
@@ -282,7 +282,7 @@ class Extend_Learner(object):
         options = [x for x in range(0, len(d)) if d[x] == maxval]
         return options[random.randint(0, len(options) - 1)]
 
-    def calc_next_move(self):
+    def calc_next_move(self, reward=None, board=None):
         """
         From Minimax. Calculates next possible moves.
         """
@@ -552,7 +552,7 @@ class MCTS(object):
     def reset(self):
         self.__init__(self.max_iter, self.C)
 
-    def calc_next_move(self):
+    def calc_next_move(self, reward=None, board=None):
         return self.uct_search(self.board)
 
     def full_check_win(self,board):

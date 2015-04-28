@@ -28,7 +28,7 @@ def play_game_mod(board, p1, p2, q=False):
     reward = None
 
     while True:
-        p1move = p1.interact(reward, board)
+        p1move = p1.calc_next_move(reward, board)
         if (p1move is None):
             board.print_grid()
             print("error player 1 a")
@@ -40,7 +40,7 @@ def play_game_mod(board, p1, p2, q=False):
             board.print_grid()
             print("error player 1 b")
             return -1, 0
-        p2move = p2.calc_next_move()
+        p2move = p2.calc_next_move(reward, board)
         if (p2move is None):
             board.print_grid()
             print("error player 2")
