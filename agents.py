@@ -374,6 +374,7 @@ class TD_Learner(object):
         self.epsilon = epsilon
         self.discount_factor = discount_factor
         self.learning_rate = learning_rate
+        self.task = task
         
         if value_table == None:
             self.value_table = ConnectDict(self.num_states)
@@ -425,7 +426,7 @@ class Q_Learner(TD_Learner):
             # explore possible moves and give 15 reward to creating streaks of length 3 or 4 and 
             # 20 reward for preventing an opponent win.
             if (self.known_states):
-                for col in task.next_possible_moves():
+                for col in self.task.next_possible_moves():
                     row = np.sum([abs(x) for x in next_board_state.grid[col]])
                     if next_board_state.streakVertical(next_board_state.grid, col, row - 2, self.player) >= 2:
                         self.value_table[grid_to_key(next_board_state.grid)][col] = 15
