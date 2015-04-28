@@ -18,39 +18,31 @@ import agents
 '''
 Modified to not print and return the player who won
 '''
-def play_game_mod(board, p1, p2):
+def play_game_no_output(board, p1, p2):
     """
     Runs Connect 4 game given simulator object and two agents (players)
-
-    Returns player number who has won
     """
     reward = None
-
+    
     while True:
         p1move = p1.calc_next_move(reward, board)
         if (p1move is None):
-            board.print_grid()
-            print("error player 1 a")
-            return -1, 0
+            return -1
         p1result, reward = board.move(p1move, 1)
         if (p1result == 1):
-            return 1, 1
+            p1.calc_next_move(reward, board)
+            return 1
         elif (p1result == -1):
-            board.print_grid()
-            print("error player 1 b")
-            return -1, 0
+            return -1
         p2move = p2.calc_next_move(reward, board)
         if (p2move is None):
-            board.print_grid()
-            print("error player 2")
-            return -1, 0
+            return -1
         p2result = board.move(p2move, -1)
         if (p2result[0] == 1):
-            return 1, -1
+            return 2
         elif (p2result[0] == -1):
-            board.print_grid()
-            print("error player 2")
-            return -1, 0
+            return -1
+
 
 
 def run_many_games(x, p1, p2, games):
@@ -63,17 +55,20 @@ def run_many_games(x, p1, p2, games):
     history = []
     for i in xrange(0,games):
         x.reset()
-        ret, winner = play_game_mod(x, p1, p2)
-        history.append(winner)
+        winner = play_game_no_output(x, p1, p2)
         if winner == 1:
             p1_wins = p1_wins + 1
-        if winner == -1:
+            history.append(1)
+        if winner == 2:
             p2_wins = p2_wins + 1 
-        if winner == 0:
+            history.append(-1)
+        if winner == -1:
             draws = draws + 1
+            history.append(0)
         #print(winner)
     #print(p1_wins, p2_wins, draws)
     return p1_wins, p2_wins, draws, history
+
 
 def parallel_MCTS_explore(i):
     """
@@ -85,7 +80,7 @@ def parallel_MCTS_explore(i):
     p2 = MCTS(x, 100,i)
     #p2 = Random_Learner(x)
     p1_wins, p2_wins, draws, history = run_multiple_games(x, p1, p2, games)
-    print(i)
+    #print(i)
     return p2_wins/games
 
 
