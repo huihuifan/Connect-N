@@ -33,6 +33,8 @@
 
 \vspace{-1.5cm}
 
+\section*{ALL FIGURES NEED CAPTIONS STILL}
+
 \section{Problem Description}
 
 The problem we chose to work on is that of the classic children's game, Connect-4, but extrapolated to be "Connect-N", where players strive to create streaks of length N with their tokens, while stopping their opponent from creating N-length streaks.
@@ -72,14 +74,11 @@ The simulator has a number of helper methods as well:
 \item \textbf{print\_grid}, which prints the current board state
 \end{enumerate}
 
-We have written a separate function, called \textbf{play\_game}, that serves as a driver function to run the Connect N game (diagrammed in \textbf{Figure 1}).  The driver function takes as input two learners, and uses the Connect N simulator to create a game. 
-
+We have written a separate function, called \textbf{play\_game}, that serves as a driver function to run the Connect N game (diagrammed in \textbf{Figure 1}).  The driver function takes as input two learners, and uses the Connect N simulator to create a game. The game asks each learner for an action and takes the specified moves. If neither player has won, it continues the game by passing reward and the new board state back to the learners.
 
 \includegraphics[scale=.7]{game_process.png}
 
 \section{detailed description of state and action space including features, table with explanations as to why you encoded the state and action space they way you did is sufficient- everyone (andre)}
-
-
 
 \section{Approaches}
 \textbf{THIS IS COMBINED MOTIVATION FOR APPROACHES + DETAILED DESCRIPTION OF APPROACHES}
