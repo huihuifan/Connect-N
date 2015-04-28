@@ -5,9 +5,10 @@ import SimpleHTTPServer
 import urlparse
 import json
 import numpy as np
-import sys
 
 import learners
+
+PORT = 8000
 
 Q_value_table = None
 last_action = -1
@@ -29,9 +30,6 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         if (ind == -1):
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
         else:
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
             arr = json.loads(self.path[ind + 6:ind2])
             x = learners.ConnectN(7,4)
             x.grid = np.array(arr)
@@ -69,7 +67,7 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 def start_server():
     """Start the server."""
-    server_address = ("", int(sys.argv[1]))
+    server_address = ("", PORT)
     server = BaseHTTPServer.HTTPServer(server_address, TestHandler)
     server.serve_forever()
 
