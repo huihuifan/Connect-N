@@ -400,18 +400,18 @@ class TD_Learner(object):
         Implementation of Softmax Policy, which weights towards better actions rather
         than sampling uniformly across all possible actions (epsilon-greedy)
         """
-
+        
         def weighted_pick(weights,n_picks):
             t = np.cumsum(weights)
             s = sum(weights)
             return np.searchsorted(t,rand(n_picks)*s)
-
+        
         tau = .5
         key_val = grid_to_key(next_board_state.grid)
-
+        
         vals = self.value_table[key_val]
         num = ([math.e**(float(x)/tau) for x in vals])
-
+        
         probs = [x/sum(num) for x in num]
         best_action = weighted_pick(probs, 1)
 
