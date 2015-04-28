@@ -387,7 +387,7 @@ class TD_Learner(object):
         if e_table == None:
             self.e = ConnectDict(self.num_states)
         else:
-            self.e = e
+            self.e = e_table
 
         self.player = player
         self.trace_size = trace_size
