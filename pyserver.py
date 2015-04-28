@@ -42,6 +42,9 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     p1.interact(-50, x)
                 self.wfile.write(-100)
             else:
+                self.send_response(200)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
                 if agent == "Minimax":
                     p1 = learners.Minimax_Learner(x, 3, 4, -1, "minimax")
                     next_move = p1.calc_next_move()
@@ -60,7 +63,6 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                         p1.interact(50, x)
                     self.wfile.write(-1*next_move)
                 else:
-                    print next_move
                     self.wfile.write(next_move)
 
 
