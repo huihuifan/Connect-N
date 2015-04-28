@@ -246,7 +246,7 @@ class Random_Learner(object):
         self.board = board
 
 
-    def calc_next_move(selfm reward=None, board=None):
+    def calc_next_move(self, reward=None, board=None):
         moves = self.board.next_possible_moves()
         return moves[random.randint(0, len(moves) - 1)]
 
