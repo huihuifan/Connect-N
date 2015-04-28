@@ -23,7 +23,7 @@ def play_game_no_output(board, p1, p2):
     Runs Connect 4 game given simulator object and two agents (players)
     """
     reward = None
-    
+
     while True:
         p1move = p1.calc_next_move(reward, board)
         if (p1move is None):
@@ -60,7 +60,7 @@ def run_many_games(x, p1, p2, games):
             p1_wins = p1_wins + 1
             history.append(1)
         if winner == 2:
-            p2_wins = p2_wins + 1 
+            p2_wins = p2_wins + 1
             history.append(-1)
         if winner == -1:
             draws = draws + 1
@@ -76,7 +76,7 @@ def parallel_MCTS_explore(i):
     """
     games = 100
     x = ConnectN(5, 3)
-    p1 = Random_Learner(x) 
+    p1 = Random_Learner(x)
     p2 = MCTS(x, 100,i)
     #p2 = Random_Learner(x)
     p1_wins, p2_wins, draws, history = run_multiple_games(x, p1, p2, games)
@@ -93,7 +93,7 @@ def select_MCTS_exploreterm():
         pool = Pool()  # start all workers
         win_rate = pool.map(parallel_MCTS_explore, exp_term_range)
         win_rate = np.array(win_rate)
-    plt.plot(exp_term_range, win_rate)    
+    plt.plot(exp_term_range, win_rate)
     plt.title('MCTS Exploration Term Grid Search')
     plt.xlabel('Exploration Term Value')
     plt.ylabel('Win-rate against Random_Learner')
