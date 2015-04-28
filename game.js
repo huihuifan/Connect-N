@@ -153,7 +153,7 @@ run_game = function () {
             
             $.ajax({
                     type: "get",
-                    url: "http://localhost:8000?stuff="+JSON.stringify(board)+"&col="+current_column+"&agent="+agent,
+                    url: "?stuff="+JSON.stringify(board)+"&col="+current_column+"&agent="+agent,
                     data: {}
             }).done(function( o ) {
                 if (o == -100) {
