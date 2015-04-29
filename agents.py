@@ -246,6 +246,8 @@ class Random_Learner(object):
 
     def calc_next_move(self, reward=None, board=None):
         moves = self.board.next_possible_moves()
+        if len(moves) == 0:
+            return -1
         return moves[random.randint(0, len(moves) - 1)]
 
 
@@ -479,6 +481,7 @@ class Q_Learner(TD_Learner):
             next_action = np.argmax(self.value_table[grid_to_key(next_board_state.grid)])
 
         # Update value function.
+
         delta = reward + self.discount_factor * np.amax(self.value_table[grid_to_key(next_board_state.grid)]) - self.value_table[grid_to_key(self.last_board_state)][self.last_action]
         self.value_table[grid_to_key(self.last_board_state)][self.last_action] += self.learning_rate * delta
 
