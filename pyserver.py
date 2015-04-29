@@ -40,7 +40,7 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             col = int(self.path[ind2 + 5:ind3])
             if (x.check_win(col, np.sum([abs(j) for j in x.grid[col]]) - 1, 1) == 1):
                 if agent == "QL":
-                    p1 = Q_Learner(x, Q_value_table, False)
+                    p1 = Q_Learner(x, Q_value_table, True)
                     p1.last_board_state = last_board.grid
                     p1.last_action = last_action
                     p1.calc_next_move(-50, x)
@@ -50,7 +50,7 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     p1 = Minimax_Learner(x, 3, 4, -1, "minimax")
                     next_move = p1.calc_next_move()
                 elif agent == "QL":
-                    p1 = Q_Learner(x, Q_value_table, False)
+                    p1 = Q_Learner(x, Q_value_table, True)
                     next_move = p1.calc_next_move(None, x)
                     last_action = next_move
                     Q_value_table = p1.value_table

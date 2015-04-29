@@ -428,35 +428,35 @@ class Q_Learner(TD_Learner):
             if (self.known_states):
                 for col in self.task.next_possible_moves():
                     row = np.sum([abs(x) for x in next_board_state.grid[col]])
-                    if next_board_state.streakVertical(next_board_state.grid, col, row - 2, self.player) >= 2:
+                    if next_board_state.streakVertical(next_board_state.grid, col, row - (self.task.n - 2), self.player) >= self.task.n - 2:
                         self.value_table[grid_to_key(next_board_state.grid)][col] = 15
                     temp_board = deepcopy(next_board_state.grid)
                     temp_board[col][row] = self.player
-                    for i in range(0, 4):
-                        if next_board_state.streakHorizontal(temp_board, col - i, row, self.player) >= 3:
+                    for i in range(0, self.task.n):
+                        if next_board_state.streakHorizontal(temp_board, col - i, row, self.player) >= self.task.n - 1:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 15
-                        if next_board_state.streakDiagonalUp(temp_board, col - i, row - i, self.player) >= 3:
+                        if next_board_state.streakDiagonalUp(temp_board, col - i, row - i, self.player) >= self.task.n - 1:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 15
-                        if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, self.player) >= 3:
+                        if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, self.player) >= self.task.n - 1:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 15
 
-                    if next_board_state.streakVertical(next_board_state.grid, col, row - 3, -self.player) == 3:
+                    if next_board_state.streakVertical(next_board_state.grid, col, row - (self.task.n - 1), -self.player) == self.task.n - 1:
                         self.value_table[grid_to_key(next_board_state.grid)][col] = 20
                     temp_board = deepcopy(next_board_state.grid)
                     temp_board[col][row] = -1*self.player
-                    for i in range(0, 4):
-                        if next_board_state.streakHorizontal(temp_board, col - i, row, -1*self.player) == 4:
+                    for i in range(0, self.task.n):
+                        if next_board_state.streakHorizontal(temp_board, col - i, row, -1*self.player) == self.task.n:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 20
-                        if next_board_state.streakDiagonalUp(temp_board, col - i, row - i, -1*self.player) == 4:
+                        if next_board_state.streakDiagonalUp(temp_board, col - i, row - i, -1*self.player) == self.task.n:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 20
-                        if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, -1*self.player) == 4:
+                        if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, -1*self.player) == self.task.n:
                             self.value_table[grid_to_key(next_board_state.grid)][col] = 20
 
             next_action = self.softmax(next_board_state)
 
             self.last_board_state = next_board_state.grid
 
-            if self.last_board_state == None:
+            if self.last_board_state is None:
                 print("massive error plz")
 
             self.last_action = next_action

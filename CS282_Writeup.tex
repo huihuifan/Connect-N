@@ -105,12 +105,10 @@ We implemented three baselines:
 
 \begin{itemize}
 
-\item For length of streak, each streak has value $x * 2^(x-1)$, where x is the length of the streak
-\item For opponent streaks, each node has value $(x *  2^x) / 6$, where x is the length of the streak
-
-We decided upon these values \textbf{LUCY}!!!!
-
+\item Each streak contributes a value of $x * 2^x/2$, where $x$ is the length of the streak, except when $x = n$, where the streak contributes a value of $2000000$.
+\item Each opponent streak contributes a value $-(x *  2^x) / 6$, where x is the length of the streak, except when $x = n$, where the streak contributes a value of $-1000000$.
 \end{itemize}
+The motivation for these values was that longer streaks are closer to the goal state, and therefore should have much higher value. We chose $2^{x-1}$ at first, but found the agent prioritizing creating multiple streaks of length $x$ instead of creating a streak of $x-1$, so we increased the difference in value between streaks even more. At first, we did not have negative values for opponent streaks, which resulted in very boring games between Minimax agents, since there was little interaction between the agents, and the first player always won. The negative value for opponent streaks was added to incentivize agents to try to block the progress of their opponent. We divided by an extra factor of 3 so agents would still prioritize extending their own streak over blocking an opponent streak of the same length. The values for $x=n$ are chosen to represent $\infty$ since they represent winning or losing the game.
 
 We also explore an extension to Minimax, called \textbf{alpha-beta pruning}, motivated by the idea that often Minimax explores more branches than is required. For example, if it needs to expand down to depth 3, but is currently at depth 2, it will continue expanding all branches to depth 3 even if one branch clearly would lead to a loss. In alpha-beta pruned Minimax, the tree is pruned to only continue investigating good paths. The algorithm controls the range of values the tree should continue searching down, and we initialize this range to $\pm 1000$ for generality.
 
@@ -123,8 +121,7 @@ The first reinforcement learning approach we looked at was Q Learning, an off-po
 \begin{enumerate}
 \item We replaced $\epsilon$-greedy with the \textbf{VDBE-Softmax} policy described in [Tokic, 2011]. When evaluated on the Gridworld, VDBE-Softmax outperformed $\epsilon$-greedy in cumulative reward substantially, so we thought it could potentially do better in Connect-N as well.
 \item We implemented \textbf{eligibility traces}, as described in the Sutton and Barto textbook and as we covered in class discussions, as it can help the learner learn more efficiently. Unfortunately, the complete eligibility traces algorithm iterates over all states and actions, which was computationally infeasible in this game, as the states represent all possible versions of the Connect N board state. Instead, we implement a limited version of eligibility traces, where the algorithm updates $Q(s, a)$ and $e(s, a)$ for each board state it currently knows and all board states that can be reached by taking one action from the current board state.
-\item \textbf{LUCY}- add known states and shaping rewards
-
+\item We implemented a version of \textbf{known states}, where some classes of board states are given a known value. Since our Q Learner only stores states as we reach them, due to space constraints, our implementation of known states does not initialize values for states. Instead, at each board state, we check for certain conditions, and populate the value table then if the conditions are satisfied. First, for each possible action, we checked if the action would create a streak of length greater than or equal to $n-1$. If so, we give it a value of 15. For reference, a winning action has value 25. Second, we checked if the action would directly prevent an opponent win, and gave the action value 20, which guarantees our learner would prevent enemy wins. The implementation of known states for Q Learning was inspired and based on the heuristics for Minimax, since the idea of both is to estimate the value of a state.
 \end{enumerate}
 
 \begin{wrapfigure}{l}{5cm}

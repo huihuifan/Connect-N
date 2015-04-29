@@ -125,7 +125,7 @@ class ConnectN:
     Following streak functions check if player has token streak in the four possible win directions
     """
     def streakVertical(self, board, col, row, player):
-        if row > len(board[col]) - self.n:
+        if row < 0 or row > len(board[col]) - self.n or col < 0 or col >= self.grid_size:
             return 0
         for i in range(0,self.n):
             if board[col][row + i] == -1*player:
@@ -135,7 +135,7 @@ class ConnectN:
         return self.n
 
     def streakHorizontal(self, board, col, row, player):
-        if col > len(board) - self.n:
+        if row < 0 or row >= self.grid_size or col < 0 or col > len(board) - self.n:
             return 0
         for i in range(0,self.n):
             if board[col + i][row] == -1*player:
@@ -145,7 +145,7 @@ class ConnectN:
         return self.n
 
     def streakDiagonalUp(self, board, col, row, player):
-        if row > len(board[col]) - self.n or col > len(board) - self.n:
+        if row < 0 or row > len(board[col]) - self.n or col < 0 or col > len(board) - self.n:
             return 0
         for i in range(0,self.n):
             if board[col + i][row + i] == -1*player:
@@ -155,7 +155,7 @@ class ConnectN:
         return self.n
 
     def streakDiagonalDown(self, board, col, row, player):
-        if row < self.n or col > len(board) - self.n:
+        if row < self.n or row >= self.grid_size or col > len(board) - self.n or col < 0:
             return 0
         for i in range(0,self.n):
             if board[col + i][row - i] == -1*player:
