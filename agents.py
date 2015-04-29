@@ -455,6 +455,10 @@ class Q_Learner(TD_Learner):
             next_action = self.softmax(next_board_state)
 
             self.last_board_state = next_board_state.grid
+
+            if self.last_board_state == None:
+                print("massive error plz")
+
             self.last_action = next_action
             return self.last_action
 
