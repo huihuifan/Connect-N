@@ -29,11 +29,10 @@
 
 \title{\TitleFont \textbf{Connect N:\\ A Reinforcement Learning Approach}}
 \author{\TitleFont Lucy Cheng, Angela Fan, Andre Nguyen}
+\date{}
 \maketitle
 
 \vspace{-1.5cm}
-
-\section*{ALL FIGURES NEED CAPTIONS STILL}
 
 \section{Problem Description}
 
@@ -76,20 +75,25 @@ The simulator has a number of helper methods as well:
 
 We have written a separate function, called \textbf{play\_game}, that serves as a driver function to run the Connect N game (diagrammed in \textbf{Figure 1}).  The driver function takes as input two learners, and uses the Connect N simulator to create a game. The game asks each learner for an action and takes the specified moves. If neither player has won, it continues the game by passing reward and the new board state back to the learners.
 
+\begin{figure}
+\centering
 \includegraphics[scale=.7]{game_process.png}
+\caption{Play Game Driver Function}
+\end{figure}
 
 \section{State and Action Spaces}
 
 Possible \textbf{actions} are integers representing the numerical column number that a player wishes to put their token into.
 
-The \textbf{states} are boards, represented as NumPy arrays (see Figure 2).
-
-\includegraphics[scale=.7]{matrix.png} 
+The \textbf{states} are boards, represented as NumPy arrays. The board is initialized to be full of zeros, which represent empty token spots. Player 1's tokens replace the 0 with 1, and player -1's tokens replace the 0 with -1. 
 
 \section{Approaches}
-\textbf{THIS IS COMBINED MOTIVATION FOR APPROACHES + DETAILED DESCRIPTION OF APPROACHES}
 
+\begin{figure}
+\centering
 \includegraphics[scale=.5]{learners.png}
+\caption{Implemented Baselines and Learners, with Extensions}
+\end{figure}
 
 \subsubsection{Baselines} 
 
