@@ -13,6 +13,7 @@
 \usepackage{makeidx}
 \usepackage{wrapfig}
 
+
 \titleformat{\section}
   {\normalfont\fontsize{14}{15}\bfseries}{\thesection}{1em}{}
 
@@ -136,25 +137,52 @@ To pre-train the Q learner, we pass the board state between different games, all
 
 
 \section{detailed description of your results/comparisons- everyone- wait for results}
-
-\begin{table}[h]
-\begin{tabular}{llllllllllll}
-Player 1 (row) / Player 2 (col) & Random                                                                                                                        & Extend            & MCTS                              & Minimax depth-2                             & Minimax depth-2 'ab' & Minimax depth-4                                              & Minimax depth-4 'ab' & Minimax depth-5   & Minimax depth-5 'ab' & Q-Learning                                & Q-Learning w/ Known States \\
-
-Random                          & 0.5607 / 0.0002 / 0.4391                                                                                                      & 0.04 / 0.0 / 0.96 & 0.2 / 0.0 / 0.8                   & 0.13 / 0.0 / 0.87                           & 0.65 / 0.0 / 0.35    & \begin{tabular}[c]{@{}l@{}}0.01 / \\ 0.0 / 0.99\end{tabular} & 0.02 / 0.0 / 0.98    & 0.03 / 0.0 / 0.97 & 0.0 / 0.0 / 1.0      &                                           &                            \\
-Extend                          &                                                                                                                               &                   &                                   & 0.0 / 0.0 / 1.0                             &                      &                                                              &                      &                   &                      &                                           &                            \\
-MCTS                            &                                                                                                                               &                   &                                   &                                             &                      &                                                              &                      &                   &                      &                                           &                            \\
-Minimax depth-2                 &                                                                                                                               &                   &                                   & 0.0 / 0.0 / 1.0 (0.0 / 0.0 / 1.0 w/ forced) &                      &                                                              &                      &                   &                      &                                           &                            \\
-Minimax depth-2 'ab'            &                                                                                                                               &                   &                                   &                                             &                      &                                                              &                      &                   &                      &                                           &                            \\
-Minimax depth-4                 &                                                                                                                               &                   &                                   &                                             &                      & 0.0 / 0.0 / 1.0 (1.0 / 0.0 / 0.0)                            &                      &                   &                      &                                           &                            \\
-Minimax depth-4 'ab'            &                                                                                                                               &                   &                                   &                                             &                      &                                                              &                      &                   &                      &                                           &                            \\
-Minimax depth-5                 &                                                                                                                               &                   &                                   &                                             &                      &                                                              &                      &                   &                      &                                           &                            \\
-Minimax depth-5 'ab'            &                                                                                                                               &                   &                                   &                                             &                      &                                                              &                      &                   &                      &                                           &                            \\
-Q-Learning                      & \begin{tabular}[c]{@{}l@{}}0.7604 / 0.1118 / 0.1278 (trained 10000) -\\ 0.7493 / 0.1209 / 0.1298 (trained 22000)\end{tabular} &                   & 0.75 / 0.05 / 0.2 (trained 32000) & 0.139 / 0.351 / 0.51 (trained 20000)        &                      & 0.0 / 0.4 / 0.6 (trained 21000)                              &                      &                   &                      & 0.0876 / 0.8439 / 0.0685 (both untrained) &                            \\
-Q-Learning w/ Known States      & 0.7502 / 0.1192 / 0.1306 (trained 10000) - 0.7503 / 0.1201 / 0.1296 (trained 22000)                                           &                   &                                   & 0.149 / 0.334 / 0.517 (trained 20000)       &                      & 0.001 / 0.487 / 0.512 (trained 21000)                        &                      &                   &                      & 0.0905 / 0.8438 / 0.0657 (both untrained) &                           
+Table 1: Player 1 Random\\\\
+\begin{tabular}{l | l}
+Player 2 Type & W/D/L                    \\ \hline
+Random        & 0.5607 / 0.0002 / 0.4391 \\
+Extend        & 0.04 / 0.0 / 0.96        \\
+MCTS          & 0.2 / 0.0 / 0.8          \\
+Minimax d2    & 0.13 / 0.0 / 0.87        \\
+Minimax d2 ab & 0.65 / 0.0 / 0.35        \\
+Minimax d4    & 0.01 / 0.0 / 0.99        \\
+Minimax d4 ab & 0.02 / 0.0 / 0.98        \\
+Minimax d5    & 0.03 / 0.0 / 0.97        \\
+Minimax d5 ab &                         
+\end{tabular}\\\\
+Table 2: Player 1 Q-Learning Trained 10k\\\\
+\begin{tabular}{l|l}
+Player 2 Type               & W/T/L                                     \\ \hline
+Random     & 0.7604 / 0.1118 / 0.1278 \\
+MCTS                        & 0.75 / 0.05 / 0.2  \\                      
+Minimax d2 & 0.139 / 0.351 / 0.51     \\
+Minimax d4 & 0.0 / 0.4 / 0.6
+\end{tabular}\\\\
+Table 3: Player 1 Q-Learning Known States Trained 10k\\\\
+\begin{tabular}{l|l}
+Player 2 Type & W/D/L                    \\ \hline
+Random        & 0.7502 / 0.1192 / 0.1306 \\
+Minimax d2    & 0.149 / 0.334 / 0.517    \\
+Minimax d4    &  0.0905 / 0.8438 / 0.0657                       
+\end{tabular}\\\\
+Table 4: Player 2 Minimax d2\\\\
+\begin{tabular}{l|l}
+Player 1 Type                & W/D/L                           \\\hline
+Random                       &  0.87  / 0.0 / 0.13             \\
+Extend                       & 1.0  / 0.0 / 0.0                \\
+Minimax d2                   & 1.0   / 0.0 /  0.0              \\
+Q Learning Trained 10k         &  0.51  / 0.351 / 0.139        \\
+Q Learning Known Trained 10k & 0.517 / 0.334 / 0.149 (tr. 20k)
+\end{tabular}\\\\
+Table 5: Player 2 Minimax d5\\\\
+\begin{tabular}{l|l}
+Player 1 Type                     & W/D/L               \\\hline
+Random                            &  0.99/ 0.0 / 0.01     \\
+Minimax d4                        & 1.0 / 0.0 / 0.0       \\
+Minimax d4 (Forced Player 1 Move Middle)   & 0.0  / 0.0 / 1.0    \\
+Q Learning Trained 10k            & 0.6 / 0.4 / 0.0       \\
+Q Learning Known Trained 10k      & 0.512 / 0.487 / 0.001
 \end{tabular}
-\end{table}
-
 
 \section{thorough description of why you got the results you did, a few pages- everyone- wait for results}
 
