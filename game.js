@@ -145,18 +145,18 @@ run_game = function () {
                     .duration(500)
                     .attr("cy", -10 + margin + (row_to_fill * rowHeight));
 
-                d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
-                    .transition()
-                    .delay(500)
-                    .duration(0)
-                    .style("fill", function() {
-                        if (counter == 0) {
-                            return "#9bd8c5"
-                        }
-                        else {
-                            return "#eca7ae"
-                        }
-                    });
+                // d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
+                //     .transition()
+                //     .delay(500)
+                //     .duration(0)
+                //     .style("fill", function() {
+                //         if (counter == 0) {
+                //             return "#9bd8c5"
+                //         }
+                //         else {
+                //             return "#eca7ae"
+                //         }
+                //     });
             };
 
 
@@ -165,7 +165,6 @@ run_game = function () {
             var row_to_fill = next_open_spot[current_column]--;
             
             board[current_column][6 - row_to_fill] = 1;
-
 
             make_move(current_column, row_to_fill);
             
