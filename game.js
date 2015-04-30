@@ -145,20 +145,7 @@ run_game = function () {
                     .duration(500)
                     .attr("cy", -10 + margin + (row_to_fill * rowHeight));
 
-                // d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
-                //     .transition()
-                //     .delay(500)
-                //     .duration(0)
-                //     .style("fill", function() {
-                //         if (counter == 0) {
-                //             return "#9bd8c5"
-                //         }
-                //         else {
-                //             return "#eca7ae"
-                //         }
-                //     });
             };
-
 
             
             var current_column = d3.select(this).attr("column").slice(-1);
