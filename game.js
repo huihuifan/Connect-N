@@ -19,22 +19,25 @@ jQuery.fn.extend({
 });
 
 $('#minimax').click(function() {
-    $(this).attr("class", "btn-success");
+    $(this).addClass("btn-success");
+    $(".btn-default").prop("disabled", true);
     agent = "Minimax";
 });
 
 $('#ql').click(function() {
-    $(this).attr("class", "btn-success");
+    $(this).addClass("btn-success");
+    $(".btn-default").prop("disabled", true);
     agent = "QL";
 });
 
 $('#mcts').click(function() {
-    $(this).attr("class", "btn-success");
+    $(this).addClass("btn-success");
+    $(".btn-default").prop("disabled", true);
     agent = "MCTS";
 });
 
 $('#reset').click(function() {
-    $(".btn").removeClass("btn-success");
+    $(".btn-default").removeClass("btn-success").prop("disabled", false);
     svg.remove();
     draw_board();
     run_game();
