@@ -11,7 +11,7 @@ var rowHeight = Math.round(height / row_num);
 var agent = "Minimax"
 
 $(".btn").click(function() {
-  $(this).toggleClass("clicked");
+  $(this).attr("class", "clicked");
 });
 
 $('#minimax').click(function() {
@@ -27,6 +27,7 @@ $('#mcts').click(function() {
 });
 
 $('#reset').click(function() {
+    $(".btn").class("clicked", false)
     svg.remove();
     draw_board();
     run_game();
