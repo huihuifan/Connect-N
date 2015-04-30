@@ -26,6 +26,12 @@ $('#mcts').click(function() {
     agent = "MCTS";
 });
 
+$('#reset').click(function() {
+    svg.remove();
+    draw_board();
+    run_game();
+})
+
 draw_board = function () {
 
     svg = d3.selectAll("#game")
@@ -165,7 +171,6 @@ run_game = function () {
                         title:"Yay!",
                         text: "You won!",
                         confirmButtonText: "Woot!" 
-                        
                     });
                 } else {
                     if (o < 0 && o != -100) {
