@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  29 APR 2015 20:52
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  29 APR 2015 23:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -201,18 +201,18 @@ Package: wrapfig 2003/01/31  v 3.6
 (./CS282_Writeup.aux)
 \openout1 = `CS282_Writeup.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
 
 (/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -277,17 +277,17 @@ e
 ))
 
 LaTeX Font Warning: Font shape `T1/cmr/n/b' undefined
-(Font)              using `T1/cmr/m/n' instead on input line 33.
+(Font)              using `T1/cmr/m/n' instead on input line 34.
 
 
 LaTeX Font Warning: Font shape `T1/cmr/bx/b' undefined
-(Font)              using `T1/cmr/bx/n' instead on input line 33.
+(Font)              using `T1/cmr/bx/n' instead on input line 34.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 33.
+LaTeX Font Info:    Try loading font information for U+msa on input line 34.
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 33.
+LaTeX Font Info:    Try loading font information for U+msb on input line 34.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -297,41 +297,81 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <game_process.png, id=10, 387.4475pt x 195.73125pt>
 File: game_process.png Graphic file (type png)
  <use game_process.png>
-Package pdftex.def Info: game_process.png used on input line 80.
+Package pdftex.def Info: game_process.png used on input line 81.
 (pdftex.def)             Requested size: 271.2114pt x 137.01093pt.
 
 <learners.png, id=11, 965.6075pt x 417.56pt>
 File: learners.png Graphic file (type png)
  <use learners.png>
-Package pdftex.def Info: learners.png used on input line 94.
+Package pdftex.def Info: learners.png used on input line 95.
 (pdftex.def)             Requested size: 482.80257pt x 208.77948pt.
 
-Overfull \hbox (13.04755pt too wide) in paragraph at lines 94--95
+Overfull \hbox (13.04755pt too wide) in paragraph at lines 95--96
  [][] 
  []
 
 [2 <./game_process.png>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 108.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 109.
 
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 108.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 109.
  [3 <./learners.png>] [4] <transform.png, id=27, 913.4125pt x 387.4475pt>
 File: transform.png Graphic file (type png)
  <use transform.png>
-Package pdftex.def Info: transform.png used on input line 128.
+Package pdftex.def Info: transform.png used on input line 129.
 (pdftex.def)             Requested size: 146.14899pt x 61.99286pt.
 
-Overfull \hbox (3.88521pt too wide) in paragraph at lines 128--129
+Overfull \hbox (3.88521pt too wide) in paragraph at lines 129--130
 [][] 
  []
 
 
-Overfull \hbox (1703.43645pt too wide) in paragraph at lines 141--155
-[][] 
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--186
+
  []
 
 [5 <./transform.png>] [6] (./CS282_Writeup.aux)
@@ -342,11 +382,11 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Here is how much of TeX's memory you used:
  3567 strings out of 493315
  46071 string characters out of 6137904
- 112260 words of memory out of 5000000
+ 111260 words of memory out of 5000000
  6943 multiletter control sequences out of 15000+600000
  14739 words of font info for 48 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,13n,32p,1074b,261s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,7n,32p,1074b,231s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
 /usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
@@ -358,7 +398,7 @@ al/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local
 exlive/2013/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/tex
 live/2013/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texli
 ve/2013/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb>
-Output written on CS282_Writeup.pdf (6 pages, 171789 bytes).
+Output written on CS282_Writeup.pdf (6 pages, 172450 bytes).
 PDF statistics:
  67 PDF objects out of 1000 (max. 8388607)
  45 compressed objects within 1 object stream
