@@ -160,7 +160,7 @@ run_game = function () {
                     window.alert("You win!");
                 } else {
                     if (o < 0 && o != -100) {
-                        var next_column = -1*o;
+                        var next_column = -1*o - 1;
                         var next_row_to_fill = next_open_spot[next_column]--;
                         board[next_column][6 - next_row_to_fill] = -1;
                         make_move(next_column, next_row_to_fill);
