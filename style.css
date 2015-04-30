@@ -9,6 +9,10 @@ label {
   font-weight: normal;
 }
 
+.clicked {
+  background-color: blue;
+}
+
 #page_header {
   background-color: "white";
   height: 30px;

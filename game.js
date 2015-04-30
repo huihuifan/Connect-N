@@ -10,6 +10,10 @@ var colWidth = Math.round(width / col_num);
 var rowHeight = Math.round(height / row_num);
 var agent = "Minimax"
 
+$(".btn").click(function() {
+  $(this).toggleClass("clicked");
+});
+
 $('#minimax').click(function() {
     agent = "Minimax";
 });
@@ -157,14 +161,24 @@ run_game = function () {
                     data: {}
             }).done(function( o ) {
                 if (o == -100) {
-                    window.alert("You win!");
+                    swal({
+                        title:"Yay!",
+                        text: "You won!",
+                        confirmButtonText: "Woot!" 
+                        
+                    });
                 } else {
                     if (o < 0 && o != -100) {
                         var next_column = -1*o;
                         var next_row_to_fill = next_open_spot[next_column]--;
                         board[next_column][6 - next_row_to_fill] = -1;
                         make_move(next_column, next_row_to_fill);
-                        setTimeout(function(){ alert("Computer wins!"); }, 1000);
+                        setTimeout(function(){ 
+                            swal({
+                            title:"awwwww...",
+                            text: "Computer won!",
+                            confirmButtonText: "Maybe next time..." 
+                    });; }, 1000);
                     } else {
                         var next_column = o;
                         var next_row_to_fill = next_open_spot[next_column]--;
