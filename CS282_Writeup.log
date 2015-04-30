@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  29 APR 2015 23:27
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  30 APR 2015 02:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -330,51 +330,51 @@ Overfull \hbox (3.88521pt too wide) in paragraph at lines 129--130
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 140--186
+Underfull \hbox (badness 10000) in paragraph at lines 143--189
 
  []
 
-[5 <./transform.png>] [6] (./CS282_Writeup.aux)
+[5 <./transform.png>] [6] [7] [8] [9] (./CS282_Writeup.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -398,10 +398,10 @@ al/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local
 exlive/2013/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/tex
 live/2013/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texli
 ve/2013/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb>
-Output written on CS282_Writeup.pdf (6 pages, 172450 bytes).
+Output written on CS282_Writeup.pdf (9 pages, 179771 bytes).
 PDF statistics:
- 67 PDF objects out of 1000 (max. 8388607)
- 45 compressed objects within 1 object stream
+ 78 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -122,7 +122,7 @@ The first reinforcement learning approach we looked at was Q Learning, an off-po
 \begin{enumerate}
 \item We replaced $\epsilon$-greedy with the \textbf{VDBE-Softmax} policy described in [Tokic, 2011]. When evaluated on the Gridworld, VDBE-Softmax outperformed $\epsilon$-greedy in cumulative reward substantially, so we thought it could potentially do better in Connect-N as well.
 \item We implemented \textbf{eligibility traces}, as described in the Sutton and Barto textbook and as we covered in class discussions, as it can help the learner learn more efficiently. Unfortunately, the complete eligibility traces algorithm iterates over all states and actions, which was computationally infeasible in this game, as the states represent all possible versions of the Connect N board state. Instead, we implement a limited version of eligibility traces, where the algorithm updates $Q(s, a)$ and $e(s, a)$ for each board state it currently knows and all board states that can be reached by taking one action from the current board state.
-\item We implemented a version of \textbf{known states}, where some classes of board states are given a known value. Since our Q Learner only stores states as we reach them, due to space constraints, our implementation of known states does not initialize values for states. Instead, at each board state, we check for certain conditions, and populate the value table then if the conditions are satisfied. First, for each possible action, we checked if the action would create a streak of length greater than or equal to $n-1$. If so, we give it a value of 15. For reference, a winning action has value 25. Second, we checked if the action would directly prevent an opponent win, and gave the action value 20, which guarantees our learner would prevent enemy wins. The implementation of known states for Q Learning was inspired and based on the heuristics for Minimax, since the idea of both is to estimate the value of a state.
+\item We implemented a version of \textbf{known states and shaping rewards}, where some classes of board states are given a known value. Since our Q Learner only stores states as we reach them, due to space constraints, our implementation of known states does not initialize values for states. Instead, at each board state, we check for certain conditions, and populate the value table then if the conditions are satisfied. First, for each possible action, we checked if the action would create a streak of length greater than or equal to $n-1$. If so, we give it a value of 15. For reference, a winning action has value 25. Second, we checked if the action would directly prevent an opponent win, and gave the action value 20, which guarantees our learner would prevent enemy wins. The implementation of known states for Q Learning was inspired and based on the heuristics for Minimax, since the idea of both is to estimate the value of a state.
 \end{enumerate}
 
 \begin{wrapfigure}{l}{5cm}
@@ -132,6 +132,8 @@ The first reinforcement learning approach we looked at was Q Learning, an off-po
 The Q learner continues to keep an action value table (as in Practical 1), with a slightly different data structure. The Q learner takes the board state and hashes it into a string, where 0 represents an empty spot and 1 and -1 represent self and opponent tokens. It then adds the string board state as a key into a dictionary. For computational reasons, instead of adding all of the possible board states to the dictionary, the dictionary only ever holds board states that it has seen. 
 
 To pre-train the Q learner, we pass the board state between different games, allowing the Q learner to have a better, more competitive knowledge of what actions are good or bad.
+
+Lastly, we explore training the Q learner over many many games, a strategy that we refer to as "pre-training." Since the Q learner initializes its action value table to zeros, when it pre trains for many games the Q learner begins a game with better knowledge of what board positions are potentially advantageous. Additionally, in our web interface, each game a human plays against the Q learner helps train its action-value table.
 
 \subsubsection{Monte Carlo Tree Search- andre} 
 
@@ -185,7 +187,44 @@ Q Learning Trained 10k            & 0.6 / 0.4 / 0.0       \\
 Q Learning Known Trained 10k      & 0.512 / 0.487 / 0.001
 \end{tabular}
 
-\section{thorough description of why you got the results you did, a few pages- everyone- wait for results}
+\subsubsection{Confirmations about general Connect-4 Strategies}
+
+In running our random learner against itself, we see that it is advantageous to go first, as the first random learner has a higher winrate. We theorize that this is because the first player potentially gets an extra turn, another token on the board to win with.
+
+In running our Minimax learners against themselves, we notice that when Minimax 2 plays against Minimax 4, it is not guaranteed to win as it cannot "outthink" Minimax 4. Interestingly, Minimax 4 playing Minimax 5 often splits winrate and ties many times, indicating that at some point, iterating further down into the tree, while more computationally intensive, is not actually that important. This could be because at some depth, the agent has already learned what it needs to know to choose its immediate next action. Upon taking this next action, it rebuilds the tree anyway, meaning the additional depth exploration is actually not necessary.
+
+Furthermore, when playing Minimax 4 against itself, we notice a few more results:
+
+\begin{enumerate}
+\item The second player wins if the first player does not go in the middle (odd number of columns)
+\item The first player wins if it goes in the middle (odd number of columns). We execute this strategy by adding an optional parameter that forces Minimax to begin in the middle column.
+\end{enumerate}
+
+We were surprised at first, but checking into the Connect-4 literature, we find that this is already a known fact. Given that an agent acts optimally, if it goes first and starts in the center row, it can always force a win. We discussed this in great depth, and believe that it allows the greatest flexibility in assuring diagonal wins that start the furthest down, which is important as executing a diagonal win strategy requires a large number of tokens to be put down. While horizontal wins are also require a large number of tokens, they are less common as more easily shut down and recognized.
+
+\subsubsection{Q Learning}
+
+The first thing we noticed was that the Q Learner did not appear to be learning much. After training our Q Learner for 10,000 games against many different strategies, the win rate was not much higher than using the untrained Q Learner. We theorize that this is because the Q learner's action-value table treats each board as a different state (including counting a slot filled with tokens by player 1 and player 2 as separate states), but in the test games that it plays, it sees very few games where there are exactly the same states as it knows. Thus, it is questionable whether or not eligibility traces and VDBE-Softmax helped the Q Learner's performance.
+
+However, the Q Learner performed much better than we originally anticipated. We theorize this is a result of the different heuristics that we added. For example, if there are ties in the action table, instead of breaking ties randomly, we choose the first index when we exploit, which allows the Q Learner to "stack" its tokens all in one column. This often beats the random strategy easily, particularly if the random strategy does not "get lucky" and drop a token on top of the Q Learner's stack. 
+
+Additionally, we added a number of heuristics with our shaping rewards/known states. The shaping rewards/known states extension gives the Q Learner intermediate rewards for extending its own streaks and stopping opponent streaks, which allows the Q Learner to take more targeted actions that exploit more effectively. While the Q Learner does take exploratory actions, our version of Q Learning's exploit actions are much more strategized and targeted towards the Connect-4 game, making the exploitation much better than originally anticipated. This allows the Q Learner to perform in a way that often beats humans. Playing against our Q Learner online is far more difficult than originally anticipated.
+
+Furthermore, we noticed that the Q Learner often loses against Minimax (as anticipated), but surprisingly is able to bring a large number of games to a tie. As we watched these games, we theorize that this is because the Q Learner can effectively "shut down" enough of the Minimax streaks that if Minimax does not build a situation where it can win in two (or more) ways, the Q Learner can fill up the board and force the game to a tie.
+
+\subsubsection{MCTS}
+
+We notice that MCTS does not perform as well as we expected. Based on the paper discussed in lecture, it seemed that MCTS would be able to drastically outperform Q Learning, Random, and Minimax 2, as it can asymptotically converge to Minimax. In our exploration of MCTS, however, we found the greatest gap between theory and practice. MCTS was computationally intensive and slow, as it required a large number of iterations to perform well. Additionally, we often found that MCTS continued simulating other possible games and moves when there was clearly a winning move to be taken, or a move it needed to take to prevent the opponent from winning. 
+
+We were not successful in addressing the prior issues of computational intensity. Our MCTS learner was only tested with 200 iterations, which we realized was too few for it to determine good, competitive moves, as the MCTS algorithm uses the iterations to explore deeper into each branch, rather than exploring multiple branches equally (like Minimax). It is possible that some branches that could potentially be valuable are not being explored. 
+
+We addressed the second issue using our extension that stops the MCTS iteration when it sees a winning move, which helped reduce computational time. However, this extension did not drastically change the winrate, leading us to theorize that asymptotically MCTS was taking the correct actions enough that we couldn't see the impact of potentially iterating beyond critical moves.
+
+Another issue that could have contributed to subpar MCTS results was our default policy, which we set to be random. It seems that in playing Connect-4 well, heuristics matter a lot. For example, the Minimax algorithm before static evaluation and intermediate state values, and Q learning with shaping rewards that essentially tell the Q learner what it needs to do in the specific Connect-4 case, perform much worse. It seems as if we should add Minimax-like values and attach them to each MCTS board state, so that there is a better default policy of trying actions that lead to high-value board states. This could potentially also cut down on computational time, as MCTS would theoretically only explore actions that are potentially good. Intuitively, heuristics give the RL agent more information specific to its current task and provide some starting strategies on how to navigate and complete the task, which evidently give the agent a jump start over other agents that must learn information about the world and form strategies at the same time. 
+
+\subsubsection{Extend}
+
+Our naive baseline of Extend represents how a human would play, trying to extend streaks as far as possible. Unlike a human, it does not try and prevent opponent streaks. Extend beats a random agent most of the time, even more than MCTS beats a random agent. We believe that this good performance of our Extend agent reveals that specific knowledge about the domain in the form of heuristics allow agents to perform quite well. 
 
 
 \section{Future Work}
@@ -198,7 +237,6 @@ Interesting research questions for the future could include:
 \item Adding stochasticity to the board, such as dropping the bottom row with some probability or having a probability of taking the wrong action
 \item Coding the board state as a POMDP, with information such as the number of tokens in a row, but not knowing exactly where the tokens are 
 \end{enumerate}
-
 
 
 \end{document}
