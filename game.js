@@ -10,17 +10,38 @@ var colWidth = Math.round(width / col_num);
 var rowHeight = Math.round(height / row_num);
 var agent = "Minimax"
 
+jQuery.fn.extend({
+    disable: function(state) {
+        return this.each(function() {
+            this.disabled = state;
+        });
+    }
+});
+
 $('#minimax').click(function() {
+    $(this).addClass("btn-success");
+    $(".btn-default").prop("disabled", true);
     agent = "Minimax";
 });
 
 $('#ql').click(function() {
+    $(this).addClass("btn-success");
+    $(".btn-default").prop("disabled", true);
     agent = "QL";
 });
 
 $('#mcts').click(function() {
+    $(this).addClass("btn-success");
+    $(".btn-default").prop("disabled", true);
     agent = "MCTS";
 });
+
+$('#reset').click(function() {
+    $(".btn-default").removeClass("btn-success").prop("disabled", false);
+    svg.remove();
+    draw_board();
+    run_game();
+})
 
 draw_board = function () {
 
@@ -127,27 +148,13 @@ run_game = function () {
                     .duration(500)
                     .attr("cy", -10 + margin + (row_to_fill * rowHeight));
 
-                d3.select("[column=column" + current_column + "][row=row" + (row_to_fill-1) + "]")
-                    .transition()
-                    .delay(500)
-                    .duration(0)
-                    .style("fill", function() {
-                        if (counter == 0) {
-                            return "#9bd8c5"
-                        }
-                        else {
-                            return "#eca7ae"
-                        }
-                    });
             };
-
 
             
             var current_column = d3.select(this).attr("column").slice(-1);
             var row_to_fill = next_open_spot[current_column]--;
             
             board[current_column][6 - row_to_fill] = 1;
-
 
             make_move(current_column, row_to_fill);
             
@@ -157,14 +164,23 @@ run_game = function () {
                     data: {}
             }).done(function( o ) {
                 if (o == -100) {
-                    window.alert("You win!");
+                    swal({
+                        title:"Yay!",
+                        text: "You won!",
+                        confirmButtonText: "Woot!" 
+                    });
                 } else {
                     if (o < 0 && o != -100) {
                         var next_column = -1*o - 1;
                         var next_row_to_fill = next_open_spot[next_column]--;
                         board[next_column][6 - next_row_to_fill] = -1;
                         make_move(next_column, next_row_to_fill);
-                        setTimeout(function(){ alert("Computer wins!"); }, 1000);
+                        setTimeout(function(){ 
+                            swal({
+                            title:"awwwww...",
+                            text: "Computer won!",
+                            confirmButtonText: "Maybe next time..." 
+                    });; }, 1000);
                     } else {
                         var next_column = o;
                         var next_row_to_fill = next_open_spot[next_column]--;
