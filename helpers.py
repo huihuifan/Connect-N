@@ -22,6 +22,7 @@ def play_game_no_output(board, p1, p2):
     Runs Connect 4 game given simulator object and two agents (players)
     """
     reward = None
+    is_none = True
     last_board = None
 
     while True:
@@ -40,6 +41,9 @@ def play_game_no_output(board, p1, p2):
         elif (p1result == -1):
             return -1
         last_board_2 = deepcopy(board)
+        if is_none:
+            reward = None
+            is_none = False
         p2move = p2.calc_next_move(reward, board)
         if (p2move is None):
             return -1
