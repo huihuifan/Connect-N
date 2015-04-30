@@ -10,24 +10,31 @@ var colWidth = Math.round(width / col_num);
 var rowHeight = Math.round(height / row_num);
 var agent = "Minimax"
 
-$(".btn").click(function() {
-  $(this).attr("class", "clicked");
+jQuery.fn.extend({
+    disable: function(state) {
+        return this.each(function() {
+            this.disabled = state;
+        });
+    }
 });
 
 $('#minimax').click(function() {
+    $(this).attr("class", "btn-success");
     agent = "Minimax";
 });
 
 $('#ql').click(function() {
+    $(this).attr("class", "btn-success");
     agent = "QL";
 });
 
 $('#mcts').click(function() {
+    $(this).attr("class", "btn-success");
     agent = "MCTS";
 });
 
 $('#reset').click(function() {
-    $(".btn").class("clicked", false)
+    $(".btn").removeClass("btn-success");
     svg.remove();
     draw_board();
     run_game();
