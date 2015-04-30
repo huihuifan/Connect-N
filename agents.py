@@ -424,16 +424,24 @@ class Q_Learner(TD_Learner):
     def do_known_states(self, next_board_state):
         for col in self.task.next_possible_moves():
             row = np.sum([abs(x) for x in next_board_state.grid[col]])
-            if next_board_state.streakVertical(next_board_state.grid, col, row - (self.task.n - 2), self.player) >= self.task.n - 2:
+            if next_board_state.streakVertical(next_board_state.grid, col, row - (self.task.n - 1), self.player) >= self.task.n - 1:
+                self.value_table[grid_to_key(next_board_state.grid)][col] = 25
+            elif next_board_state.streakVertical(next_board_state.grid, col, row - (self.task.n - 1), self.player) >= self.task.n - 2:
                 self.value_table[grid_to_key(next_board_state.grid)][col] = 15
             temp_board = deepcopy(next_board_state.grid)
             temp_board[col][row] = self.player
             for i in range(0, self.task.n):
-                if next_board_state.streakHorizontal(temp_board, col - i, row, self.player) >= self.task.n - 1:
+                if next_board_state.streakHorizontal(temp_board, col - i, row, self.player) >= self.task.n:
+                    self.value_table[grid_to_key(next_board_state.grid)][col] = 25
+                elif next_board_state.streakHorizontal(temp_board, col - i, row, self.player) >= self.task.n - 1:
                     self.value_table[grid_to_key(next_board_state.grid)][col] = 15
-                if next_board_state.streakDiagonalUp(temp_board, col - i, row - i, self.player) >= self.task.n - 1:
+                if next_board_state.streakDiagonalUp(temp_board, col - i, row - i, self.player) >= self.task.n:
+                    self.value_table[grid_to_key(next_board_state.grid)][col] = 25
+                elif next_board_state.streakDiagonalUp(temp_board, col - i, row - i, self.player) >= self.task.n - 1:
                     self.value_table[grid_to_key(next_board_state.grid)][col] = 15
-                if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, self.player) >= self.task.n - 1:
+                if next_board_state.streakDiagonalDown(temp_board, col - i, row + i, self.player) >= self.task.n:
+                    self.value_table[grid_to_key(next_board_state.grid)][col] = 25
+                elif next_board_state.streakDiagonalDown(temp_board, col - i, row + i, self.player) >= self.task.n - 1:
                     self.value_table[grid_to_key(next_board_state.grid)][col] = 15
 
             if next_board_state.streakVertical(next_board_state.grid, col, row - (self.task.n - 1), -self.player) == self.task.n - 1:
